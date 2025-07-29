@@ -1,6 +1,11 @@
 <zk>
-    <window title="JakartaEE + ZK Demo" border="normal" width="400px">
-        <label value="Hello from ZK Framework!" style="font-weight:bold;color:blue"/>
-        <button label="Click Me" onClick='alert("Welcome to ZK!")'/>
+    <window>
+        <style src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"/>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"/>
+        <style src="/css/style.css"/>
+        <div width="100%" sclass="row">
+            <div sclass="col-6"><label value="aa"/> </div>
+            <div sclass="col-6"><label sclass="text-danger font-bold" value="aaa"/> </div>
+        </div>
     </window>
 </zk>

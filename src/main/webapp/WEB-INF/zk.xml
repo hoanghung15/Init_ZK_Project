@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk>
+    <!-- Đường dẫn ZK update -->
+    <update-uri>/zkau</update-uri>
+
+    <!-- Cấu hình hệ thống -->
+    <system-config>
+        <!-- Bật chế độ hot reload để không cần restart server -->
+        <hot-reload>true</hot-reload>
+
+        <!-- Tùy chọn: Tắt redirect ngầm khi load trang -->
+        <disable-implicit-backforward>true</disable-implicit-backforward>
+    </system-config>
+</zk>
