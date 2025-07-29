@@ -1,0 +1,6 @@
+<zk>
+    <window title="JakartaEE + ZK Demo" border="normal" width="400px">
+        <label value="Hello from ZK Framework!" style="font-weight:bold;color:blue"/>
+        <button label="Click Me" onClick='alert("Welcome to ZK!")'/>
+    </window>
+</zk>
