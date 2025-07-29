@@ -1,11 +1,11 @@
-<zk>
-    <window>
-        <style src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"/>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"/>
-        <style src="/css/style.css"/>
-        <div width="100%" sclass="row">
-            <div sclass="col-6"><label value="aa"/> </div>
-            <div sclass="col-6"><label sclass="text-danger font-bold" value="aaa"/> </div>
-        </div>
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <!-- Nạp Tailwind CSS -->
+    <style src="/css/tailwind.css"/>
+
+    <window title="Demo Tailwind" border="normal" width="100%">
+        <vbox sclass="flex flex-col items-center justify-center h-screen bg-gray-100">
+            <label value="Hello Tailwind" sclass="text-[100px] font-bold text-blue-600"/>
+            <button label="Click Me" sclass="mt-4 px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"/>
+        </vbox>
     </window>
 </zk>
