@@ -1,14 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zk>
-    <!-- Đường dẫn ZK update -->
-    <update-uri>/zkau</update-uri>
-
-    <!-- Cấu hình hệ thống -->
     <system-config>
-        <!-- Bật chế độ hot reload để không cần restart server -->
-        <hot-reload>true</hot-reload>
-
-        <!-- Tùy chọn: Tắt redirect ngầm khi load trang -->
-        <disable-implicit-backforward>true</disable-implicit-backforward>
+        <debug-js>true</debug-js>
+        <update-uri>/zkau</update-uri>
+        <keep-view-namespace>true</keep-view-namespace>
     </system-config>
+
+    <library-property>
+        <name>org.zkoss.zk.ui.debug</name>
+        <value>true</value>
+    </library-property>
+
+    <!-- Disable caching for development -->
+    <library-property>
+        <name>org.zkoss.zk.WPD.cache</name>
+        <value>false</value>
+    </library-property>
+    <library-property>
+        <name>org.zkoss.zk.WCS.cache</name>
+        <value>false</value>
+    </library-property>
 </zk>
