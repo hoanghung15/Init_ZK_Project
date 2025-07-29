@@ -2,10 +2,35 @@
     <!-- Nạp Tailwind CSS -->
     <style src="/css/tailwind.css"/>
 
-    <window title="Demo Tailwind" border="normal" width="100%">
-        <vbox sclass="flex flex-col items-center justify-center h-screen bg-gray-100">
-            <label value="Hello Tailwind" sclass="text-[100px] font-bold text-blue-600"/>
-            <button label="Click Me" sclass="mt-4 px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"/>
-        </vbox>
+    <window width="100%" height="100%" sclass="px-[80px]">
+        <div sclass="w-full flex h-[500px] py-[0px]">
+            <div sclass="w-[50%]">
+                <div sclass="w-full flex items-center justify-center">
+                    <image sclass="scale-75" src="/images/logo.jpg"/>
+                </div>
+                <div  sclass="w-full flex items-center" >
+
+                    <label value="Cài đặt Extensions"/>
+                </div>
+            </div>
+<!--            <div sclass="w-[50%] flex items-center justify-center">-->
+<!--                <image sclass="scale-75" src="/images/logo.jpg"/>-->
+<!--                <label sclass="block" value="aa"/>-->
+<!--            </div>-->
+            <div sclass="w-[50%] text-center">
+                <label value="ĐĂNG NHẬP" sclass="font-bold text-[#B71C1C] text-[32px]"/>
+                <label sclass="block mt-[20px]" value="Phần mềm quản lý và đối soát hợp đồng Viettel"/>
+                <textbox placeholder="Tên đăng nhập" sclass="border rounded p-2 w-[50%] mt-[40px] h-[34px]"/>
+                <textbox placeholder="Mật khẩu" type="password" sclass="border rounded p-2 w-[50%] h-[34px] mt-[12px]"/>
+                <div sclass="mb-[20px]">
+                    <button sclass="w-[50%] h-[40px] mt-[24px] bg-[#B71C1C] rounded-[32px] text-white hover:bg-[#871212]"
+                            label="ĐĂNG NHẬP"/>
+                </div>
+                <label sclass="text-gray-500 text-[16px] mt-[80px]" value="Quên mật khẩu"/>
+                <label sclass="text-gray-500 block text-[16px] mt-[40px]" value="Đăng ký lần đầu"/>
+                <label sclass="font-bold block text-[16px] mt-[20px]"
+                       value="Tổng đài chăm sóc khách hàng 18008000 nhánh 2"/>
+            </div>
+        </div>
     </window>
 </zk>
