@@ -1,1 +1,47 @@
 npx tailwindcss -i ./src/main/webapp/css/input.css -o ./src/main/webapp/css/tailwind.css --watch
+
+CREATE TABLE staff (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100) NOT NULL,
+    role VARCHAR(50) NOT NULL
+);
+CREATE TABLE contract (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    number_contract VARCHAR(50) NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    email_a VARCHAR(100),
+    email_b VARCHAR(100),
+    phone_a VARCHAR(20),
+    phone_b VARCHAR(20),
+    staff_id INT NOT NULL,
+
+    contract_type VARCHAR(50) NOT NULL,
+    contract_scope VARCHAR(50) NOT NULL,
+
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+
+    payment_method VARCHAR(50) NOT NULL,
+    status VARCHAR(20) NOT NULL DEFAULT 'PENDING',
+
+    CONSTRAINT fk_staff FOREIGN KEY (staff_id) REFERENCES staff(id)
+);
+
+INSERT INTO contract
+(number_contract, name, email_a, email_b, phone_a, phone_b, staff_id,
+ contract_type, contract_scope, start_date, end_date, payment_method, status)
+VALUES
+('HD001', 'Hợp đồng kiểm thử hệ thống', 'a1@company.com', 'b1@partner.com', '0901234567', '0912345678', 1,
+ 'Kiểm thử', 'Nội bộ', '2025-01-01', '2025-06-30', 'Tiền mặt', 'DONE'),
+
+('HD002', 'Hợp đồng triển khai phần mềm', 'a2@company.com', 'b2@partner.com', '0902234567', '0913345678', 2,
+ 'Phát triển', 'Đối tác ngoài', '2025-02-01', '2025-12-31', 'Chuyển khoản', 'PENDING'),
+
+('HD003', 'Hợp đồng bảo trì máy chủ', 'a3@company.com', 'b3@partner.com', '0903234567', '0914345678', 3,
+ 'Phát triển', 'Nội bộ', '2025-03-10', '2025-09-10', 'Ghi nợ', 'DONE'),
+
+('HD004', 'Hợp đồng thuê thiết bị', 'a4@company.com', 'b4@partner.com', '0904234567', '0915345678', 4,
+ 'Kiểm thử', 'Đối tác ngoài', '2025-04-15', '2026-04-15', 'Tiền mặt', 'PENDING'),
+
+('HD005', 'Hợp đồng hợp tác quảng cáo', 'a5@company.com', 'b5@partner.com', '0905234567', '0916345678', 5,
+ 'Phát triển', 'Đối tác ngoài', '2025-05-20', '2026-05-20', 'Chuyển khoản', 'DONE');
