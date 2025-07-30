@@ -2,7 +2,7 @@
     <!-- Nạp Tailwind CSS -->
     <style src="/css/tailwind.css"/>
 
-    <div width="100%" height="100%" sclass="px-[80px] py-[40px] rounded-5">
+    <div apply="org.example.testdemozul.controller.LoginController" width="100%" height="100%" sclass="px-[80px] py-[40px] rounded-5">
         <div sclass="w-full h-[90%] flex items-center justify-center rounded-[32px]">
             <div sclass="w-[50%] h-[50%]">
                 <div sclass="w-full flex items-center justify-center">

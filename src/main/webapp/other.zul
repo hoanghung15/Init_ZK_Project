@@ -1,0 +1,5 @@
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <!-- Nạp Tailwind CSS -->
+    <style src="/css/tailwind.css"/>
+    <label value="aaaa"/>
+</zk>

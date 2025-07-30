@@ -9,29 +9,33 @@ public class DBConnection {
     private static final String JDBC_USER = "root";
     private static final String JDBC_PASS = "root";
 
-    private static Connection connection;
-
     static {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            connection = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASS);
-            System.out.println("✅ Kết nối MySQL thành công!");
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
 
+    // Mỗi lần gọi sẽ trả về một Connection mới
     public static Connection getConnection() {
-        return connection;
-    }
-
-    public static void main(String[] args) {
-        if (getConnection() != null) {
-            System.out.printf(getConnection().toString());
-            System.out.println("Test: Kết nối hoạt động bình thường.");
-        } else {
-            System.out.println("Test: Kết nối thất bại.");
+        try {
+            return DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASS);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 
+    public static void main(String[] args) {
+        try (Connection conn = getConnection()) {
+            if (conn != null) {
+                System.out.println("✅ Kết nối MySQL thành công: " + conn);
+            } else {
+                System.out.println("❌ Kết nối thất bại.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
