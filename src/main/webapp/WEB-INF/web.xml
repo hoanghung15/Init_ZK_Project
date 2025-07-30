@@ -28,4 +28,16 @@
         <servlet-name>auEngine</servlet-name>
         <url-pattern>/zkau/*</url-pattern>
     </servlet-mapping>
+    <welcome-file-list>
+        <welcome-file>index.zul</welcome-file>
+    </welcome-file-list>
+    <filter>
+        <filter-name>JwtCookieAuthFilter</filter-name>
+        <filter-class>org.example.testdemozul.security.JwtCookieAuthFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>JwtCookieAuthFilter</filter-name>
+        <url-pattern>*.zul</url-pattern>
+    </filter-mapping>
 </web-app>

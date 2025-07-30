@@ -2,4 +2,5 @@
     <!-- Nạp Tailwind CSS -->
     <style src="/css/tailwind.css"/>
     <label value="aaaa"/>
+    <button label="Test AJAX" onClick='Clients.log("Clicked!")'/>
 </zk>

@@ -29,8 +29,8 @@ public class LoginController extends SelectorComposer<Component> {
         // Chặn cache trình duyệt
         HttpServletResponse response = (HttpServletResponse) Executions.getCurrent().getNativeResponse();
         response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
-        response.setHeader("Pragma", "no-cache"); // HTTP 1.0
-        response.setDateHeader("Expires", 0); // Proxies
+        response.setHeader("Pragma", "no-cache");
+        response.setDateHeader("Expires", 0);
 
         // Nếu đã có token thì redirect sang trang khác
         var request = (javax.servlet.http.HttpServletRequest) Executions.getCurrent().getNativeRequest();
@@ -38,7 +38,7 @@ public class LoginController extends SelectorComposer<Component> {
             for (var cookie : request.getCookies()) {
                 if ("access_token".equals(cookie.getName()) && cookie.getValue() != null) {
                     // Có token -> đã login -> redirect
-                    Executions.sendRedirect("other.zul");
+                    Executions.sendRedirect("home.zul");
                     return;
                 }
             }
@@ -75,13 +75,13 @@ public class LoginController extends SelectorComposer<Component> {
 
             // Tạo cookie cho Access Token
             Cookie accessCookie = new Cookie("access_token", accessToken);
-            accessCookie.setHttpOnly(true);
+            accessCookie.setHttpOnly(false);
             accessCookie.setPath("/");
             accessCookie.setMaxAge(expiryTimeAccess);
 
             // Tạo cookie cho Refresh Token
             Cookie refreshCookie = new Cookie("refresh_token", refreshToken);
-            refreshCookie.setHttpOnly(true);
+            refreshCookie.setHttpOnly(false);
             refreshCookie.setPath("/");
             refreshCookie.setMaxAge(expiryTimeRefresh * 2);
 
@@ -89,7 +89,7 @@ public class LoginController extends SelectorComposer<Component> {
             response.addCookie(accessCookie);
             response.addCookie(refreshCookie);
 
-            Executions.sendRedirect("other.zul");
+            Executions.sendRedirect("home.zul");
         } else {
             Clients.showNotification("Sai username hoặc password", "error", null, "top_center", 3000);
         }

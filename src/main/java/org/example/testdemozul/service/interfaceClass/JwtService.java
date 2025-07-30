@@ -12,7 +12,7 @@ public interface JwtService {
     Date extractExpiration(String token);
 
     String generateToken(User user, boolean isAccess, int exp);
-    boolean validateToken(String token, UserDetails userDetails);
+    boolean validateToken(String token);
 
     <T> T extractClaim(String token, Function<Claims, T> claimsResolver);
 }

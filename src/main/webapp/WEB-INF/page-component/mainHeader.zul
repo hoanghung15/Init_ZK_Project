@@ -1,0 +1,50 @@
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <!-- Bootstrap CSS -->
+    <style content="text/css">
+        @import url('https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css');
+    </style>
+    <style src="/css/tailwind.css"/>
+    <style src="/css/examp.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" type="text/javascript"/>
+
+    <!-- Nội dung trang -->
+    <div apply="org.example.testdemozul.controller.HeaderController" sclass="w-full px-[80px] mt-[20px]">
+        <div sclass="row py-[10px]">
+            <div sclass="col-5 flex">
+                <image sclass="me-3 scale-100" src="/images/logoViettel_inline.png"/>
+                <label sclass="font-bold mt-[12px]" value="QUẢN LÝ VÀ ĐỐI SOÁT HỢP ĐỒNG"/>
+            </div>
+            <div sclass="col-4"></div>
+            <div sclass="col-3 text-end flex justify-between item-between">
+                <label id="usernameTxt" sclass="mt-[12px] font-bold" value="Hi,..."/>
+                <label sclass=" mt-[12px]" value="Cá nhân"/>
+                <button id="btnLogout" sclass="btn  btn-danger" label="Đăng xuất"/>
+            </div>
+        </div>
+
+        <hbox sclass="w-full test bg-danger flex items-center space-x-5 text-white text-bold rounded-2">
+            <label value="Trang chủ" sclass="cursor-pointer hover:underline me-5"
+                   onClick='Executions.sendRedirect("/other.zul")'/>
+            <label value="Quản lý hợp đồng" sclass="cursor-pointer hover:underline me-5"
+                   onClick='Executions.sendRedirect("/other.zul")'/>
+            <label value="Quản lý giao việc" sclass="cursor-pointer hover:underline me-5"
+                   onClick='Executions.sendRedirect("/other.zul")'/>
+            <label value="Quản lý biên bản hóa đơn" sclass="cursor-pointer hover:underline me-5"
+                   onClick='Executions.sendRedirect("/other.zul")'/>
+            <label value="Báo cáo" sclass="cursor-pointer hover:underline me-5"
+                   onClick='org.zkoss.zk.ui.Executions.sendRedirect("/other.zul")'/>
+            <label value="Web portal" sclass="cursor-pointer hover:underline me-5"
+                   onClick='Executions.sendRedirect("/other.zul")'/>
+            <label value="Quản lý đề nghị chuyển tiền" sclass="cursor-pointer hover:underline me-5"
+                   onClick='Executions.sendRedirect("/other.zul")'/>
+            <label value="Quản lý đối soát - Đơn vị ngoài" sclass="cursor-pointer hover:underline me-5"
+                   onClick='Executions.sendRedirect("/other.zul")'/>
+            <label value="Tiệc ích" sclass="cursor-pointer hover:underline me-5"
+                   onClick='Executions.sendRedirect("/other.zul")'/>
+            <label value="Khác" sclass="cursor-pointer hover:underline me-5"
+                   onClick='Executions.sendRedirect("/other.zul")'/>
+        </hbox>
+
+
+    </div>
+</zk>
