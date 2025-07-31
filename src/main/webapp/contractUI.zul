@@ -1,50 +1,138 @@
 <zk xmlns="http://www.zkoss.org/2005/zul">
     <style src="/css/tailwind.css"/>
+    <style src="/css/contractDetailPage.css"/>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" type="text/javascript"/>
-    <style>
-        .custom-list .z-listheader {
-        background-color: #E2E2E2;
-        color: red;
-        text-align: center;
-        border: none;
-        }
-
-        .custom-list .z-listitem {
-        background-color: #f5f5f5;
-        border: none;
-        }
-
-        .custom-list .z-listitem:hover {
-        background-color: #e0f7fa; /* xanh nhạt */
-        }
-    </style>
 
     <include src="/WEB-INF/page-component/mainHeader.zul"/>
-    <div apply="org.example.testdemozul.controller.DetailPageContractController" sclass="w-full h-full pt-[24px] px-[80px]">
+
+    <div apply="org.example.testdemozul.controller.DetailPageContractController"
+         sclass="w-full h-full pt-[24px] px-[80px]">
         <div sclass="w-full">
             <div sclass="w-full">
-                <div width="100%" sclass="">
+
+                <!-- Tiêu đề -->
+                <div width="100%">
                     <label sclass="font-bold text-[16px]" value="HỢP ĐỒNG"/>
                 </div>
 
-                <div sclass="w-full">
+                <!-- Form 2 cột x 10 dòng -->
+                <div sclass="w-full mt-4">
+                    <grid width="100%" sclass="compact-grid">
+                        <columns>
+                            <column width="50%"/>
+                            <column width="50%"/>
+                        </columns>
+                        <rows>
+                            <row>
+                                <!-- Cột 1 -->
+                                <grid sclass="compact-grid">
+                                    <columns>
+                                        <column width="40%"/>
+                                        <column width="60%"/>
+                                    </columns>
+                                    <rows>
+                                        <row>
+                                            <label value="Số hợp đồng:"/>
+                                            <textbox width="100%"/>
+                                        </row>
+                                        <row>
+                                            <label value="Tên hợp đồng:"/>
+                                            <textbox width="100%"/>
+                                        </row>
+                                        <row>
+                                            <label value="Trạng thái:"/>
+                                            <combobox width="100%">
+                                                <comboitem label="PENDING"/>
+                                                <comboitem label="DONE"/>
+                                            </combobox>
+                                        </row>
+                                        <row>
+                                            <label value="Ngày bắt đầu:"/>
+                                            <datebox width="100%"/>
+                                        </row>
+                                        <row>
+                                            <label value="Phạm vi hợp đồng:"/>
+                                            <combobox width="100%">
+                                                <comboitem label="Nội bộ"/>
+                                                <comboitem label="Đối tác ngoài"/>
+                                            </combobox>
+                                        </row>
+                                        <row>
+                                            <label value="Email bên A:"/>
+                                            <textbox width="100%"/>
+                                        </row>
+                                        <row>
+                                            <label value="Số điện thoại bên A:"/>
+                                            <textbox width="100%" multiline="true" rows="2"/>
+                                        </row>
+                                    </rows>
+                                </grid>
+
+                                <!-- Cột 2 -->
+                                <grid sclass="compact-grid">
+                                    <columns>
+                                        <column width="40%"/>
+                                        <column width="60%"/>
+                                    </columns>
+                                    <rows>
+                                        <row>
+                                            <label value="File hợp đồng:"/>
+                                            <fileupload  width="100%"/>
+                                        </row>
+                                        <row>
+                                            <label value="Người duyệt:"/>
+                                            <textbox width="100%"/>
+                                        </row>
+                                        <row>
+                                            <label value="Loại hợp đồng:"/>
+                                            <combobox width="100%">
+                                                <comboitem label="PENDING"/>
+                                                <comboitem label="DONE"/>
+                                            </combobox>
+                                        </row>
+                                        <row>
+                                            <label value="Ngày kết thúc:"/>
+                                            <datebox width="100%"/>
+                                        </row>
+                                        <row>
+                                            <label value="Phương thức thanh toán:"/>
+                                            <combobox width="100%">
+                                                <comboitem label="Nội bộ"/>
+                                                <comboitem label="Đối tác ngoài"/>
+                                            </combobox>
+                                        </row>
+                                        <row>
+                                            <label value="Email bên B:"/>
+                                            <textbox width="100%"/>
+                                        </row>
+                                        <row>
+                                            <label value="Số điện thoại bên B:"/>
+                                            <textbox width="100%" multiline="true" rows="2"/>
+                                        </row>
+                                    </rows>
+                                </grid>
+                            </row>
+                        </rows>
+                    </grid>
+                </div>
+
+                <!-- Danh sách hợp đồng -->
+                <div sclass="w-full mt-6">
                     <listbox id="contractListbox" sclass="custom-list" width="100%">
                         <listhead>
-                            <listheader style="color:#767676;"  label="STT" width="50px"/>
-                            <listheader style="color:#767676;" sclass="" label="ID" width="50px"/>
+                            <listheader style="color:#767676;" label="STT" width="50px"/>
+                            <listheader style="color:#767676;" label="ID" width="50px"/>
                             <listheader style="color:#767676;" sclass="text-start" label="Số hiệu"/>
-                            <listheader style="color:#767676;"  sclass="text-start" label="Tên hợp đồng"/>
-                            <listheader style="color:#767676;"  sclass="text-start" label="Trạng thái"/>
-                            <listheader style="color:#767676;" sclass="text-start" label="Tệp đính kèm" />
-                            <listheader style="color:#767676;" sclass="text-start" label="Từ ngày hiệu lực" />
-                            <listheader style="color:#767676;" sclass="text-start" label="Đến ngày hiệu lực" />
-                            <listheader style="color:#767676;" label="Hoạt động" />
+                            <listheader style="color:#767676;" sclass="text-start" label="Tên hợp đồng"/>
+                            <listheader style="color:#767676;" sclass="text-start" label="Trạng thái"/>
+                            <listheader style="color:#767676;" sclass="text-start" label="Tệp đính kèm"/>
+                            <listheader style="color:#767676;" sclass="text-start" label="Từ ngày hiệu lực"/>
+                            <listheader style="color:#767676;" sclass="text-start" label="Đến ngày hiệu lực"/>
+                            <listheader style="color:#767676;" label="Hoạt động"/>
                         </listhead>
-
                     </listbox>
                 </div>
             </div>
         </div>
-
     </div>
 </zk>

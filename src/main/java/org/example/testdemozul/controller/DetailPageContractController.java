@@ -8,6 +8,7 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.A;
+import org.zkoss.zul.Button;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Listbox;
@@ -43,13 +44,21 @@ public class DetailPageContractController extends SelectorComposer<Component> {
             // Tên hợp đồng
             new Listcell(contract.getName()).setParent(item);
             // Trạng thái
-            new Listcell(contract.getStatus()).setParent(item);
+            Listcell statusCell = new Listcell(contract.getStatus());
+            if ("PENDING".equalsIgnoreCase(contract.getStatus())) {
+                statusCell.setStyle("color: #d4a017;");
+            } else if ("DONE".equalsIgnoreCase(contract.getStatus())) {
+                statusCell.setStyle("color: #28a745;");
+            } else {
+                statusCell.setStyle("color: #6c757d;");
+            }
+            statusCell.setParent(item);
 
             // --- Cột file_data (hiển thị nút "Xem") ---
             Listcell fileCell = new Listcell();
             A viewLink = new A("Xem file hợp đồng"); // Tạo link chữ "Xem"
-            viewLink.setSclass("text-blue-500 underline cursor-pointer");
-
+            viewLink.setSclass("text-blue-500 underline cursor-pointer hover:underline");
+            viewLink.setStyle("text-decoration: underline;");
             viewLink.addEventListener(Events.ON_CLICK, event -> {
                 // Nếu bạn lưu path file PDF trong DB
                 String filePath = contract.getFile_data();
@@ -71,6 +80,34 @@ public class DetailPageContractController extends SelectorComposer<Component> {
             // Ngày kết thúc
             String endDateStr = contract.getEndDate() != null ? sdf.format(contract.getEndDate()) : "";
             new Listcell(endDateStr).setParent(item);
+
+            // Action
+            Listcell actionCell = new Listcell();
+
+            // Nút Sửa
+            Button btnEdit = new Button("Sửa");
+            btnEdit.setSclass("bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg me-2");
+            btnEdit.addEventListener(Events.ON_CLICK, e -> {
+                Messagebox.show("Bạn muốn sửa hợp đồng: " + contract.getName());
+                // TODO: Mở form sửa hoặc popup
+            });
+            btnEdit.setParent(actionCell);
+
+            // Nút Xóa
+            Button btnDelete = new Button("Xóa");
+            btnDelete.setSclass("bg-red-500 hover:bg-red-600 text-white px-3 py-1 bg-danger rounded-lg");
+            btnDelete.addEventListener(Events.ON_CLICK, e -> {
+                Messagebox.show("Bạn có chắc chắn muốn xóa hợp đồng: " + contract.getName() + "?",
+                        "Xác nhận", Messagebox.YES | Messagebox.NO, Messagebox.QUESTION, evt -> {
+                            if (Messagebox.ON_YES.equals(evt.getName())) {
+                                // TODO: Xử lý xóa hợp đồng
+                            }
+                        });
+            });
+            btnDelete.setParent(actionCell);
+
+            actionCell.setParent(item);
+
         });
 
     }

@@ -1,0 +1,61 @@
+.compact-grid .z-fileupload,
+.compact-grid .z-fileupload-button {
+    height: 24px !important;
+    line-height: 22px !important;
+    font-size: 12px;
+    padding: 0 8px !important;
+}
+/* Giảm chiều cao row của grid */
+.compact-grid .z-row,
+.compact-grid .z-row-inner {
+    height: 20px !important;
+    padding: 0 !important;
+}
+/* Giảm chiều cao input */
+.compact-grid .z-textbox,
+.compact-grid .z-combobox-input,
+.compact-grid .z-datebox-input,
+.compact-grid .z-doublebox {
+    height: 24px !important;
+    font-size: 12px;
+    padding: 0 2px;
+}
+
+/* Listbox compact */
+.custom-list .z-listheader {
+    background-color: #E2E2E2;
+    color: red;
+    text-align: center;
+    border: none;
+    height: 18px !important;
+    padding: 2px !important;
+    font-size: 12px;
+}
+
+
+.custom-list .z-listitem,
+.custom-list .z-listcell {
+    background-color: #f5f5f5;
+    border: none;
+    height: 14px !important;
+    padding: 0 4px !important;
+    font-size: 12px;
+}
+
+.custom-list .z-listitem:hover {
+    background-color: #e0f7fa; /* xanh nhạt */
+}
+/* Giảm kích thước icon combobox và datebox */
+.compact-grid .z-datebox-button,
+.compact-grid .z-combobox-button {
+    height: 24px !important;
+    width: 24px !important;
+    font-size: 12px !important;
+    padding: 0 !important;
+}
+
+.compact-grid .z-datebox-button .z-icon-calendar,
+.compact-grid .z-combobox-button .z-icon-caret-down {
+    font-size: 12px !important;
+    line-height: 24px !important;
+}
