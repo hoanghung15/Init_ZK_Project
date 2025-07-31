@@ -1,7 +1,14 @@
 package org.example.testdemozul.controller;
 
+import com.google.cloud.storage.BlobId;
+import com.google.cloud.storage.BlobInfo;
+import com.google.cloud.storage.Storage;
+import com.google.cloud.storage.StorageOptions;
+import com.google.firebase.FirebaseApp;
+import io.grpc.Context;
 import org.example.testdemozul.dao.ContractDAO;
 import org.example.testdemozul.model.Contract;
+import org.example.testdemozul.security.FirebaseConfig;
 import org.zkoss.util.media.Media;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
@@ -11,6 +18,7 @@ import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.*;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -36,6 +44,7 @@ public class DetailPageContractController extends SelectorComposer<Component> {
     @Override
     public void doAfterCompose(Component comp) throws Exception {
         super.doAfterCompose(comp);
+        FirebaseConfig.initFirebase();
 
         contracts = contractDAO.getAllContracts();
         ListModelList<Contract> model = new ListModelList<>(contracts);
@@ -158,14 +167,42 @@ public class DetailPageContractController extends SelectorComposer<Component> {
 //        fileContract.setParent(getSelf()); // Nếu muốn render lại
     }
 
-    private void uploadFile(){
+    private void uploadFile() throws Exception {
         fileContract.addEventListener(Events.ON_UPLOAD, event -> {
             UploadEvent ue = (UploadEvent) event;
             Media media = ue.getMedia();
-            if (media != null) {
-              fileContract.setLabel(media.getName());
+            if (media == null) return;
+
+            try {
+                // Lấy Storage với credential từ FirebaseConfig
+                Storage storage = StorageOptions.newBuilder()
+                        .setCredentials(FirebaseConfig.getCredentials())
+                        .build()
+                        .getService();
+
+                String bucketName = FirebaseApp.getInstance().getOptions().getStorageBucket();
+                String fileName = "contracts/" + System.currentTimeMillis() + "_" + media.getName();
+
+                BlobId blobId = BlobId.of(bucketName, fileName);
+                BlobInfo blobInfo = BlobInfo.newBuilder(blobId)
+                        .setContentType(media.getContentType())
+                        .build();
+
+                // Upload file
+                storage.create(blobInfo, media.getByteData());
+
+                // Tạo link public
+                String fileUrl = "https://storage.googleapis.com/" + bucketName + "/" + fileName;
+                fileContract.setLabel(fileUrl);
+
+                Messagebox.show("Upload thành công!\n" + fileUrl, "Thông báo", Messagebox.OK, Messagebox.INFORMATION);
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                Messagebox.show("Upload thất bại: " + ex.getMessage(), "Lỗi", Messagebox.OK, Messagebox.ERROR);
             }
         });
     }
+
 
 }
