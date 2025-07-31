@@ -2,27 +2,33 @@ package org.example.testdemozul.controller;
 
 import org.example.testdemozul.dao.ContractDAO;
 import org.example.testdemozul.model.Contract;
+import org.zkoss.util.media.Media;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.UploadEvent;
 import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.Wire;
-import org.zkoss.zul.A;
-import org.zkoss.zul.Button;
-import org.zkoss.zul.Label;
-import org.zkoss.zul.ListModelList;
-import org.zkoss.zul.Listbox;
-import org.zkoss.zul.Listcell;
-import org.zkoss.zul.Listitem;
-import org.zkoss.zul.Messagebox;
+import org.zkoss.zul.*;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-
 public class DetailPageContractController extends SelectorComposer<Component> {
     @Wire
     private Listbox contractListbox;
+
+    @Wire
+    private Textbox txtNumberContract, txtNameContract, txtEmailA, txtPhoneA, txtEmailB, txtPhoneB, txtApprover;
+    @Wire
+    private Combobox cbStatus, cbScope, cbContractType, cbPaymentMethod;
+    @Wire
+    private Datebox dbStartDate, dbEndDate;
+    @Wire
+    private Fileupload fileContract;
+
+    @Wire
+    private Button btnRefreshForm;
 
     private ContractDAO contractDAO = new ContractDAO();
     private List<Contract> contracts;
@@ -34,16 +40,15 @@ public class DetailPageContractController extends SelectorComposer<Component> {
         contracts = contractDAO.getAllContracts();
         ListModelList<Contract> model = new ListModelList<>(contracts);
         contractListbox.setModel(model);
+
         contractListbox.setItemRenderer((Listitem item, Contract contract, int index) -> {
-            // STT
+            // Render từng cell
+            item.setValue(contract);
             new Listcell(String.valueOf(index + 1)).setParent(item);
-            // ID
             new Listcell(String.valueOf(contract.getId())).setParent(item);
-            // Số hiệu
             new Listcell(contract.getNumberContract()).setParent(item);
-            // Tên hợp đồng
             new Listcell(contract.getName()).setParent(item);
-            // Trạng thái
+
             Listcell statusCell = new Listcell(contract.getStatus());
             if ("PENDING".equalsIgnoreCase(contract.getStatus())) {
                 statusCell.setStyle("color: #d4a017;");
@@ -54,16 +59,14 @@ public class DetailPageContractController extends SelectorComposer<Component> {
             }
             statusCell.setParent(item);
 
-            // --- Cột file_data (hiển thị nút "Xem") ---
+            // Link file
             Listcell fileCell = new Listcell();
-            A viewLink = new A("Xem file hợp đồng"); // Tạo link chữ "Xem"
-            viewLink.setSclass("text-blue-500 underline cursor-pointer hover:underline");
+            A viewLink = new A("Xem file hợp đồng");
             viewLink.setStyle("text-decoration: underline;");
+            viewLink.setSclass("text-blue-500 underline cursor-pointer hover:underline");
             viewLink.addEventListener(Events.ON_CLICK, event -> {
-                // Nếu bạn lưu path file PDF trong DB
                 String filePath = contract.getFile_data();
                 if (filePath != null && !filePath.isEmpty()) {
-                    // Mở file PDF trong tab mới
                     Executions.getCurrent().sendRedirect(filePath, "_blank");
                 } else {
                     Messagebox.show("Không tìm thấy file đính kèm!", "Thông báo", Messagebox.OK, Messagebox.EXCLAMATION);
@@ -74,28 +77,20 @@ public class DetailPageContractController extends SelectorComposer<Component> {
 
             // Ngày bắt đầu
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-            String startDateStr = contract.getStartDate() != null ? sdf.format(contract.getStartDate()) : "";
-            new Listcell(startDateStr).setParent(item);
+            new Listcell(contract.getStartDate() != null ? sdf.format(contract.getStartDate()) : "").setParent(item);
+            new Listcell(contract.getEndDate() != null ? sdf.format(contract.getEndDate()) : "").setParent(item);
 
-            // Ngày kết thúc
-            String endDateStr = contract.getEndDate() != null ? sdf.format(contract.getEndDate()) : "";
-            new Listcell(endDateStr).setParent(item);
-
-            // Action
+            // Action buttons
             Listcell actionCell = new Listcell();
-
-            // Nút Sửa
             Button btnEdit = new Button("Sửa");
             btnEdit.setSclass("bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg me-2");
-            btnEdit.addEventListener(Events.ON_CLICK, e -> {
-                Messagebox.show("Bạn muốn sửa hợp đồng: " + contract.getName());
-                // TODO: Mở form sửa hoặc popup
-            });
+            btnEdit.addEventListener(Events.ON_CLICK, e -> fillForm(contract));
             btnEdit.setParent(actionCell);
 
-            // Nút Xóa
             Button btnDelete = new Button("Xóa");
-            btnDelete.setSclass("bg-red-500 hover:bg-red-600 text-white px-3 py-1 bg-danger rounded-lg");
+            btnDelete.setSclass("px-3 py-1 rounded-lg me-2 bg-red-500 text-white hover:bg-red-600 !important");
+
+
             btnDelete.addEventListener(Events.ON_CLICK, e -> {
                 Messagebox.show("Bạn có chắc chắn muốn xóa hợp đồng: " + contract.getName() + "?",
                         "Xác nhận", Messagebox.YES | Messagebox.NO, Messagebox.QUESTION, evt -> {
@@ -105,10 +100,72 @@ public class DetailPageContractController extends SelectorComposer<Component> {
                         });
             });
             btnDelete.setParent(actionCell);
-
             actionCell.setParent(item);
-
         });
 
+        // Sự kiện chọn dòng
+        contractListbox.addEventListener(Events.ON_SELECT, event -> {
+            if (contractListbox.getSelectedItem() != null) {
+                Contract selected = contractListbox.getSelectedItem().getValue();
+                fillForm(selected);
+            }
+        });
+        uploadFile();
+
+        btnRefreshForm.addEventListener(Events.ON_CLICK, e -> {
+            cleanForm();
+        });
     }
+
+    private void fillForm(Contract c) {
+        txtNumberContract.setValue(c.getNumberContract());
+        txtNameContract.setValue(c.getName());
+        cbStatus.setValue(c.getStatus());
+        cbScope.setValue(c.getContractScope());
+        dbStartDate.setValue(c.getStartDate());
+        dbEndDate.setValue(c.getEndDate());
+        txtEmailA.setValue(c.getEmailA());
+        txtPhoneA.setValue(c.getPhoneA());
+        txtEmailB.setValue(c.getEmailB());
+        txtPhoneB.setValue(c.getPhoneB());
+        txtApprover.setValue(String.valueOf(c.getStaffID()));
+        cbContractType.setValue(c.getContractType());
+        cbPaymentMethod.setValue(c.getPaymentMethod());
+    }
+
+    private void cleanForm() {
+        // Textbox
+        txtNumberContract.setValue("");
+        txtNameContract.setValue("");
+        txtEmailA.setValue("");
+        txtPhoneA.setValue("");
+        txtEmailB.setValue("");
+        txtPhoneB.setValue("");
+        txtApprover.setValue("");
+
+        // Combobox
+        cbStatus.setSelectedIndex(-1);        // Bỏ chọn
+        cbScope.setSelectedIndex(-1);
+        cbContractType.setSelectedIndex(-1);
+        cbPaymentMethod.setSelectedIndex(-1);
+
+        // Datebox
+        dbStartDate.setValue(null);
+        dbEndDate.setValue(null);
+
+//        fileContract.detach();
+//        fileContract = new Fileupload();
+//        fileContract.setParent(getSelf()); // Nếu muốn render lại
+    }
+
+    private void uploadFile(){
+        fileContract.addEventListener(Events.ON_UPLOAD, event -> {
+            UploadEvent ue = (UploadEvent) event;
+            Media media = ue.getMedia();
+            if (media != null) {
+              fileContract.setLabel(media.getName());
+            }
+        });
+    }
+
 }
