@@ -3,7 +3,7 @@ package org.example.testdemozul.model;
 import java.util.Date;
 
 public class Contract {
-    private int id;
+    private Integer id;
 
     private String numberContract;
     private String name;
@@ -32,7 +32,7 @@ public class Contract {
         this.status = status;
     }
 
-    public Contract(int id, String numberContract, String name, String emailA, String emailB, String phoneA, String phoneB, String status, int staffID, String contractType, String contractScope, Date startDate, Date endDate, String paymentMethod,String file_data) {
+    public Contract(Integer id, String numberContract, String name, String emailA, String emailB, String phoneA, String phoneB, String status, int staffID, String contractType, String contractScope, Date startDate, Date endDate, String paymentMethod,String file_data) {
         this.id = id;
         this.numberContract = numberContract;
         this.name = name;
@@ -61,11 +61,11 @@ public class Contract {
     public Contract() {
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

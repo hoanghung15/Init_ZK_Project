@@ -1,11 +1,11 @@
 package org.example.testdemozul.controller;
 
+import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
 import com.google.firebase.FirebaseApp;
-import io.grpc.Context;
 import org.example.testdemozul.dao.ContractDAO;
 import org.example.testdemozul.model.Contract;
 import org.example.testdemozul.security.FirebaseConfig;
@@ -18,7 +18,6 @@ import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.*;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -36,28 +35,32 @@ public class DetailPageContractController extends SelectorComposer<Component> {
     private Fileupload fileContract;
 
     @Wire
-    private Button btnRefreshForm;
+    private Button btnRefreshForm, btnSaveForm,btnCancel;
 
     private ContractDAO contractDAO = new ContractDAO();
     private List<Contract> contracts;
+    private String fileURL = null;
+    private Integer currentIdContract;
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
         super.doAfterCompose(comp);
         FirebaseConfig.initFirebase();
 
+        // Load danh sách hợp đồng
         contracts = contractDAO.getAllContracts();
         ListModelList<Contract> model = new ListModelList<>(contracts);
         contractListbox.setModel(model);
 
+        // Render danh sách
         contractListbox.setItemRenderer((Listitem item, Contract contract, int index) -> {
-            // Render từng cell
             item.setValue(contract);
             new Listcell(String.valueOf(index + 1)).setParent(item);
             new Listcell(String.valueOf(contract.getId())).setParent(item);
             new Listcell(contract.getNumberContract()).setParent(item);
             new Listcell(contract.getName()).setParent(item);
 
+            // Trạng thái
             Listcell statusCell = new Listcell(contract.getStatus());
             if ("PENDING".equalsIgnoreCase(contract.getStatus())) {
                 statusCell.setStyle("color: #d4a017;");
@@ -84,7 +87,7 @@ public class DetailPageContractController extends SelectorComposer<Component> {
             viewLink.setParent(fileCell);
             fileCell.setParent(item);
 
-            // Ngày bắt đầu
+            // Ngày bắt đầu và kết thúc
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             new Listcell(contract.getStartDate() != null ? sdf.format(contract.getStartDate()) : "").setParent(item);
             new Listcell(contract.getEndDate() != null ? sdf.format(contract.getEndDate()) : "").setParent(item);
@@ -98,13 +101,15 @@ public class DetailPageContractController extends SelectorComposer<Component> {
 
             Button btnDelete = new Button("Xóa");
             btnDelete.setSclass("px-3 py-1 rounded-lg me-2 bg-red-500 text-white hover:bg-red-600 !important");
-
-
             btnDelete.addEventListener(Events.ON_CLICK, e -> {
                 Messagebox.show("Bạn có chắc chắn muốn xóa hợp đồng: " + contract.getName() + "?",
                         "Xác nhận", Messagebox.YES | Messagebox.NO, Messagebox.QUESTION, evt -> {
                             if (Messagebox.ON_YES.equals(evt.getName())) {
                                 // TODO: Xử lý xóa hợp đồng
+                                contractDAO.deleteContract(contract.getId());
+                                Messagebox.show(" Xoá thành công ");
+                                Executions.sendRedirect(null);
+
                             }
                         });
             });
@@ -112,20 +117,33 @@ public class DetailPageContractController extends SelectorComposer<Component> {
             actionCell.setParent(item);
         });
 
-        // Sự kiện chọn dòng
+        // Sự kiện chọn dòng → fill form
         contractListbox.addEventListener(Events.ON_SELECT, event -> {
             if (contractListbox.getSelectedItem() != null) {
                 Contract selected = contractListbox.getSelectedItem().getValue();
+                currentIdContract = selected.getId();
                 fillForm(selected);
             }
         });
+
+        // Khởi tạo upload file
         uploadFile();
 
-        btnRefreshForm.addEventListener(Events.ON_CLICK, e -> {
+        // Nút refresh form
+        btnRefreshForm.addEventListener(Events.ON_CLICK, e -> cleanForm());
+
+        // Nút lưu hợp đồng
+        btnSaveForm.addEventListener(Events.ON_CLICK, event -> {
+            createOrUpdateContract();
+            Messagebox.show("Update hợp đồng thành công");
+        });
+
+        btnCancel.addEventListener(Events.ON_CLICK, event -> {
             cleanForm();
         });
     }
 
+    // Đổ dữ liệu vào form khi sửa
     private void fillForm(Contract c) {
         txtNumberContract.setValue(c.getNumberContract());
         txtNameContract.setValue(c.getName());
@@ -140,10 +158,11 @@ public class DetailPageContractController extends SelectorComposer<Component> {
         txtApprover.setValue(String.valueOf(c.getStaffID()));
         cbContractType.setValue(c.getContractType());
         cbPaymentMethod.setValue(c.getPaymentMethod());
+        fileURL = c.getFile_data();
     }
 
+    // Reset form
     private void cleanForm() {
-        // Textbox
         txtNumberContract.setValue("");
         txtNameContract.setValue("");
         txtEmailA.setValue("");
@@ -152,21 +171,18 @@ public class DetailPageContractController extends SelectorComposer<Component> {
         txtPhoneB.setValue("");
         txtApprover.setValue("");
 
-        // Combobox
-        cbStatus.setSelectedIndex(-1);        // Bỏ chọn
+        cbStatus.setSelectedIndex(-1);
         cbScope.setSelectedIndex(-1);
         cbContractType.setSelectedIndex(-1);
         cbPaymentMethod.setSelectedIndex(-1);
 
-        // Datebox
         dbStartDate.setValue(null);
         dbEndDate.setValue(null);
 
-//        fileContract.detach();
-//        fileContract = new Fileupload();
-//        fileContract.setParent(getSelf()); // Nếu muốn render lại
+        fileURL = null;
     }
 
+    // Upload file và trả về URL public
     private void uploadFile() throws Exception {
         fileContract.addEventListener(Events.ON_UPLOAD, event -> {
             UploadEvent ue = (UploadEvent) event;
@@ -174,7 +190,7 @@ public class DetailPageContractController extends SelectorComposer<Component> {
             if (media == null) return;
 
             try {
-                // Lấy Storage với credential từ FirebaseConfig
+                // Khởi tạo Storage từ FirebaseConfig
                 Storage storage = StorageOptions.newBuilder()
                         .setCredentials(FirebaseConfig.getCredentials())
                         .build()
@@ -188,12 +204,21 @@ public class DetailPageContractController extends SelectorComposer<Component> {
                         .setContentType(media.getContentType())
                         .build();
 
-                // Upload file
-                storage.create(blobInfo, media.getByteData());
+                // Upload file lên bucket
+                Blob blob = storage.create(blobInfo, media.getByteData());
 
-                // Tạo link public
+                // Set quyền public cho file vừa upload
+                blob.createAcl(com.google.cloud.storage.Acl.of(
+                        com.google.cloud.storage.Acl.User.ofAllUsers(),
+                        com.google.cloud.storage.Acl.Role.READER
+                ));
+
+                // URL public
                 String fileUrl = "https://storage.googleapis.com/" + bucketName + "/" + fileName;
-                fileContract.setLabel(fileUrl);
+
+                // Gán vào form và hiển thị thông báo
+                fileContract.setLabel(media.getName());
+                fileURL = fileUrl;
 
                 Messagebox.show("Upload thành công!\n" + fileUrl, "Thông báo", Messagebox.OK, Messagebox.INFORMATION);
 
@@ -204,5 +229,36 @@ public class DetailPageContractController extends SelectorComposer<Component> {
         });
     }
 
+    // Mapping form → Contract
+    private Contract mapingContract() {
+        Contract contract = new Contract();
+        contract.setNumberContract(txtNumberContract.getValue());
+        contract.setName(txtNameContract.getValue());
+        contract.setStatus(cbStatus.getValue());
+        contract.setStartDate(dbStartDate.getValue());
+        contract.setContractScope(cbScope.getValue());
+        contract.setEmailA(txtEmailA.getValue());
+        contract.setPhoneA(txtPhoneA.getValue());
 
+        contract.setFile_data(fileURL);
+        contract.setStaffID(Integer.parseInt(txtApprover.getValue()));
+        contract.setContractType(cbContractType.getValue());
+        contract.setPaymentMethod(cbPaymentMethod.getValue());
+        contract.setEndDate(dbEndDate.getValue());
+        contract.setEmailB(txtEmailB.getValue());
+        contract.setPhoneB(txtPhoneB.getValue());
+
+        return contract;
+    }
+
+    // Lưu hoặc update hợp đồng
+    private void createOrUpdateContract() {
+        Contract contract = mapingContract();
+        if (currentIdContract == null) {
+            contractDAO.creatNewContract(contract);
+        } else {
+            contract.setId(currentIdContract);
+            contractDAO.updateContract(contract);
+        }
+    }
 }

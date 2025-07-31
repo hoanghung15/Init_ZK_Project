@@ -14,7 +14,7 @@ public class FirebaseConfig {
         // Đọc file từ classpath
         InputStream serviceAccount = FirebaseConfig.class
                 .getClassLoader()
-                .getResourceAsStream("firebase/hello-notification-22e1c-firebase-adminsdk-g370w-dae09fe5fc.json");
+                .getResourceAsStream("firebase/hello-notification-22e1c-firebase-adminsdk-g370w-55f33fa603.json");
 
         if (serviceAccount == null) {
             throw new RuntimeException("Không tìm thấy file Firebase JSON trong resources/firebase/");
@@ -24,12 +24,12 @@ public class FirebaseConfig {
 
         FirebaseOptions options = new FirebaseOptions.Builder()
                 .setCredentials(credentials)
-                .setStorageBucket("hello-notification-22e1c.appspot.com") // ✅ Không có gs://
+                .setStorageBucket("hello-notification-22e1c.appspot.com")
                 .build();
 
         if (FirebaseApp.getApps().isEmpty()) {
             FirebaseApp.initializeApp(options);
-            System.out.println("✅ Firebase initialized successfully!");
+            System.out.println("Firebase initialized successfully!");
         }
     }
 

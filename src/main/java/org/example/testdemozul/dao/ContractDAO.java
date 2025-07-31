@@ -123,13 +123,13 @@ public class ContractDAO {
         return contracts;
     }
 
-    public List<Contract> getAllContracts(){
+    public List<Contract> getAllContracts() {
         List<Contract> contracts = new ArrayList<>();
         String sql = new String("SELECT * FROM contract");
-        try(Connection conn = DBConnection.getConnection();
-        Statement statement = conn.prepareStatement(sql)){
-            try(ResultSet resultSet = statement.executeQuery(sql)){
-                while (resultSet.next()){
+        try (Connection conn = DBConnection.getConnection();
+             Statement statement = conn.prepareStatement(sql)) {
+            try (ResultSet resultSet = statement.executeQuery(sql)) {
+                while (resultSet.next()) {
                     Contract contract = new Contract();
                     contract.setId(resultSet.getInt("id"));
                     contract.setNumberContract(resultSet.getString("number_contract"));
@@ -149,12 +149,84 @@ public class ContractDAO {
                     contracts.add(contract);
                 }
             }
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return contracts;
     }
+
+    public void creatNewContract(Contract contract) {
+        String sql = "INSERT INTO contract (" +
+                "number_contract, name, email_a, email_b, phone_a, phone_b, " +
+                "staff_id, contract_type, contract_scope, start_date, end_date, " +
+                "payment_method, status, file_data" +
+                ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql.toString())) {
+            ps.setString(1, contract.getNumberContract());
+            ps.setString(2, contract.getName());
+            ps.setString(3, contract.getEmailA());
+            ps.setString(4, contract.getEmailB());
+            ps.setString(5, contract.getPhoneA());
+            ps.setString(6, contract.getPhoneB());
+            ps.setInt(7, contract.getStaffID());
+            ps.setString(8, contract.getContractType());
+            ps.setString(9, contract.getContractScope());
+            ps.setDate(10, new java.sql.Date(contract.getStartDate().getTime()));
+            ps.setDate(11, new java.sql.Date(contract.getEndDate().getTime()));
+            ps.setString(12, contract.getPaymentMethod());
+            ps.setString(13, contract.getStatus());
+            ps.setString(14, contract.getFile_data());
+
+            int rows = ps.executeUpdate();
+            System.out.println("Inserted rows: " + rows);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateContract(Contract contract) {
+        String sql = "UPDATE contract SET " +
+                "number_contract = ?, name = ?, email_a = ?, email_b = ?, phone_a = ?, phone_b = ?, " +
+                "staff_id = ?, contract_type = ?, contract_scope = ?, start_date = ?, end_date = ?, " +
+                "payment_method = ?, status = ?, file_data = ? " +
+                "WHERE id = ?";
+
+        try (PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql)) {
+            ps.setString(1, contract.getNumberContract());
+            ps.setString(2, contract.getName());
+            ps.setString(3, contract.getEmailA());
+            ps.setString(4, contract.getEmailB());
+            ps.setString(5, contract.getPhoneA());
+            ps.setString(6, contract.getPhoneB());
+            ps.setInt(7, contract.getStaffID());
+            ps.setString(8, contract.getContractType());
+            ps.setString(9, contract.getContractScope());
+            ps.setDate(10, new java.sql.Date(contract.getStartDate().getTime()));
+            ps.setDate(11, new java.sql.Date(contract.getEndDate().getTime()));
+            ps.setString(12, contract.getPaymentMethod());
+            ps.setString(13, contract.getStatus());
+            ps.setString(14, contract.getFile_data()); // Nếu là BLOB, dùng setBinaryStream
+            ps.setInt(15, contract.getId()); // Điều kiện WHERE theo id
+
+            int rows = ps.executeUpdate();
+            System.out.println("Updated rows: " + rows);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteContract(Integer id){
+        String sql = "DELETE FROM contract WHERE id = ?";
+        try(PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql)){
+            ps.setInt(1, id);
+            int rows = ps.executeUpdate();
+            System.out.println("Deleted rows: " + rows);
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public static void main(String[] args) {
         ContractDAO contractDAO = new ContractDAO();
