@@ -5,6 +5,14 @@ CREATE TABLE staff (
     name VARCHAR(100) NOT NULL,
     role VARCHAR(50) NOT NULL
 );
+
+INSERT INTO staff (name, role) VALUES
+('Nguyễn Văn A', 'Trưởng phòng'),
+('Trần Thị B', 'Nhân viên kinh doanh'),
+('Lê Văn C', 'Nhân viên kinh doanh'),
+('Phạm Thị D', 'Trưởng phòng'),
+('Hoàng Văn E', 'Nhân viên kinh doanh');
+
 CREATE TABLE contract (
     id INT PRIMARY KEY AUTO_INCREMENT,
     number_contract VARCHAR(50) NOT NULL,
@@ -14,6 +22,7 @@ CREATE TABLE contract (
     phone_a VARCHAR(20),
     phone_b VARCHAR(20),
     staff_id INT NOT NULL,
+    file_data VARCHAR(255),
 
     contract_type VARCHAR(50) NOT NULL,
     contract_scope VARCHAR(50) NOT NULL,

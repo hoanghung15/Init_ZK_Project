@@ -1,10 +1,18 @@
 package org.example.testdemozul.controller;
 
 import org.example.testdemozul.dao.ContractDAO;
+import org.example.testdemozul.model.Contract;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.select.SelectorComposer;
+import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Label;
+import org.zkoss.zul.ListModelList;
+import org.zkoss.zul.Listbox;
+import org.zkoss.zul.Listcell;
+import org.zkoss.zul.Listitem;
+
+import java.util.List;
 
 
 public class ContractController extends SelectorComposer<Component> {
@@ -47,13 +55,13 @@ public class ContractController extends SelectorComposer<Component> {
         int contractDone = contractDAO.getAllContractsWithScopeAndStatus("Nội bộ", "DONE").size();
         int totalContractInternal = contractDAO.getAllContractsWithScopeAndStatus("Nội bộ", null).size();
         int contractPending = totalContractInternal - contractDone;
-        int contractDoneByManager = contractDAO.getAllContractsWithRoleScopeStatus("Trưởng phòng","Nội bộ", "DONE").size();
+        int contractDoneByManager = contractDAO.getAllContractsWithRoleScopeStatus("Trưởng phòng", "Nội bộ", "DONE").size();
         int contractDoneByStaff = contractDAO.getAllContractsWithRoleScopeStatus("Nhân viên kinh doanh", "Nội bộ", "DONE").size();
 
         int contractExDone = contractDAO.getAllContractsWithScopeAndStatus("Đối tác ngoài", "DONE").size();
         int totalContractEx = contractDAO.getAllContractsWithScopeAndStatus("Đối tác ngoài", null).size();
         int contractExPending = totalContractEx - contractExDone;
-        int contractExDoneByManager = contractDAO.getAllContractsWithRoleScopeStatus("Trưởng phòng","Đối tác ngoài", "DONE").size();
+        int contractExDoneByManager = contractDAO.getAllContractsWithRoleScopeStatus("Trưởng phòng", "Đối tác ngoài", "DONE").size();
         int contractExDoneByStaff = contractDAO.getAllContractsWithRoleScopeStatus("Nhân viên kinh doanh", "Đối tác ngoài", "DONE").size();
 
         txtContractDoneByStaff.setValue(String.valueOf(contractDoneByStaff));

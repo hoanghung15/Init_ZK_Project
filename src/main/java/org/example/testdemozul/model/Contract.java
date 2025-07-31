@@ -12,6 +12,8 @@ public class Contract {
     private String phoneA;
     private String phoneB;
     private String status;
+    private String file_data;
+
     private int staffID;
 
     private String contractType;
@@ -30,7 +32,7 @@ public class Contract {
         this.status = status;
     }
 
-    public Contract(int id, String numberContract, String name, String emailA, String emailB, String phoneA, String phoneB, String status, int staffID, String contractType, String contractScope, Date startDate, Date endDate, String paymentMethod) {
+    public Contract(int id, String numberContract, String name, String emailA, String emailB, String phoneA, String phoneB, String status, int staffID, String contractType, String contractScope, Date startDate, Date endDate, String paymentMethod,String file_data) {
         this.id = id;
         this.numberContract = numberContract;
         this.name = name;
@@ -45,6 +47,15 @@ public class Contract {
         this.startDate = startDate;
         this.endDate = endDate;
         this.paymentMethod = paymentMethod;
+        this.file_data = file_data;
+    }
+
+    public String getFile_data() {
+        return file_data;
+    }
+
+    public void setFile_data(String file_data) {
+        this.file_data = file_data;
     }
 
     public Contract() {

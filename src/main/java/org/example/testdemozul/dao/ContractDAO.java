@@ -2,6 +2,7 @@ package org.example.testdemozul.dao;
 
 import org.example.testdemozul.model.Contract;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -52,7 +53,7 @@ public class ContractDAO {
 
                     contract.setPaymentMethod(resultSet.getString("payment_method"));
                     contract.setStatus(resultSet.getString("status"));
-
+                    contract.setFile_data(resultSet.getString("file_data"));
 
                     contracts.add(contract);
                 }
@@ -111,7 +112,7 @@ public class ContractDAO {
                     contract.setEndDate(resultSet.getDate("end_date"));
                     contract.setPaymentMethod(resultSet.getString("payment_method"));
                     contract.setStatus(resultSet.getString("status"));
-
+                    contract.setFile_data(resultSet.getString("file_data"));
                     contracts.add(contract);
                 }
             }
@@ -122,8 +123,42 @@ public class ContractDAO {
         return contracts;
     }
 
+    public List<Contract> getAllContracts(){
+        List<Contract> contracts = new ArrayList<>();
+        String sql = new String("SELECT * FROM contract");
+        try(Connection conn = DBConnection.getConnection();
+        Statement statement = conn.prepareStatement(sql)){
+            try(ResultSet resultSet = statement.executeQuery(sql)){
+                while (resultSet.next()){
+                    Contract contract = new Contract();
+                    contract.setId(resultSet.getInt("id"));
+                    contract.setNumberContract(resultSet.getString("number_contract"));
+                    contract.setName(resultSet.getString("name"));
+                    contract.setEmailA(resultSet.getString("email_a"));
+                    contract.setEmailB(resultSet.getString("email_b"));
+                    contract.setPhoneA(resultSet.getString("phone_a"));
+                    contract.setPhoneB(resultSet.getString("phone_b"));
+                    contract.setStaffID(resultSet.getInt("staff_id"));
+                    contract.setContractType(resultSet.getString("contract_type"));
+                    contract.setContractScope(resultSet.getString("contract_scope"));
+                    contract.setStartDate(resultSet.getDate("start_date"));
+                    contract.setEndDate(resultSet.getDate("end_date"));
+                    contract.setPaymentMethod(resultSet.getString("payment_method"));
+                    contract.setStatus(resultSet.getString("status"));
+                    contract.setFile_data(resultSet.getString("file_data"));
+                    contracts.add(contract);
+                }
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return contracts;
+    }
+
     public static void main(String[] args) {
         ContractDAO contractDAO = new ContractDAO();
+        System.out.println(contractDAO.getAllContracts().size());
         System.out.println(contractDAO.getAllContractsWithScopeAndStatus(null, "DONE").size());
         System.out.println(contractDAO.getAllContractsWithRoleScopeStatus("Trưởng phòng", "Nội bộ", "DONE").size());
     }

@@ -94,14 +94,14 @@
                         <div sclass="p-[20px]">
                             <div sclass="w-full flex mt-[12px]">
                                 <image sclass="me-4" src="/images/addcontracticon.png"/>
-                                <label sclass="cursor-pointer underline me-2" value="Khai báo hợp đồng nội bộ:      "/>
-                                <label sclass="cursor-pointer underline font-bold text-[#C31229]" value="20 hợp đồng"/>
+                                <label sclass="cursor-pointer underline me-2 mt-1" value="Khai báo hợp đồng nội bộ:      "/>
+                                <image src="/images/iconadd.png"/>
                             </div>
                             <div sclass="w-full flex mt-[24px]">
                                 <image sclass="me-4" src="/images/addcontracticon.png"/>
-                                <label sclass="cursor-pointer underline me-2"
+                                <label sclass="cursor-pointer underline me-2 mt-1"
                                        value="Khai báo hợp đồng khách hàng:      "/>
-                                <label sclass="cursor-pointer underline font-bold text-[#C31229]" value="20 hợp đồng"/>
+                                <image src="/images/iconadd.png"/>
                             </div>
                         </div>
                     </div>
