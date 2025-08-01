@@ -14,7 +14,7 @@ public class FirebaseConfig {
         // Đọc file từ classpath
         InputStream serviceAccount = FirebaseConfig.class
                 .getClassLoader()
-                .getResourceAsStream("firebase/hello-notification-22e1c-firebase-adminsdk-g370w-55f33fa603.json");
+                .getResourceAsStream("firebase/firebase-admin-sdk.json");
 
         if (serviceAccount == null) {
             throw new RuntimeException("Không tìm thấy file Firebase JSON trong resources/firebase/");
