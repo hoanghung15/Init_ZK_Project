@@ -19,29 +19,34 @@
                             <div sclass="w-full flex mt-[12px]">
                                 <image sclass="me-4" src="/images/iconContract.png"/>
                                 <label sclass="cursor-pointer underline me-2" value="Số hợp đồng đã duyệt:      "/>
-                                <label id="txtContractDone" sclass="cursor-pointer underline font-bold text-[#C31229]" value="20 hợp đồng"/>
+                                <label id="txtContractDone" sclass="cursor-pointer underline font-bold text-[#C31229]"
+                                       value="20 hợp đồng"/>
                             </div>
                             <div sclass="w-full flex mt-[24px]">
                                 <image sclass="me-4" src="/images/iconContract.png"/>
                                 <label sclass="cursor-pointer underline me-2" value="Số hợp đồng chưa duyệt:      "/>
-                                <label id="txtContractPending" sclass="cursor-pointer underline font-bold text-[#C31229]" value="20 hợp đồng"/>
+                                <label id="txtContractPending"
+                                       sclass="cursor-pointer underline font-bold text-[#C31229]" value="20 hợp đồng"/>
                             </div>
 
                             <div sclass="w-full flex mt-[24px]">
                                 <image sclass="me-4" src="/images/iconContract.png"/>
                                 <label sclass="cursor-pointer underline me-2" value="Tổng số hợp đồng:      "/>
-                                <label id="txtContractTotal" sclass="cursor-pointer underline font-bold text-[#C31229]" value="20 hợp đồng"/>
+                                <label id="txtContractTotal" sclass="cursor-pointer underline font-bold text-[#C31229]"
+                                       value="20 hợp đồng"/>
                             </div>
                             <div sclass="w-full flex mt-[24px]">
                                 <image sclass="me-4" src="/images/iconContract.png"/>
                                 <label sclass="cursor-pointer underline me-2" value="Lãnh đạo đã duyệt:      "/>
-                                <label id="txtContractDoneByManager" sclass="cursor-pointer underline font-bold text-[#C31229]" value="20 hợp đồng"/>
+                                <label id="txtContractDoneByManager"
+                                       sclass="cursor-pointer underline font-bold text-[#C31229]" value="20 hợp đồng"/>
                             </div>
 
                             <div sclass="w-full flex mt-[24px]">
                                 <image sclass="me-4" src="/images/iconContract.png"/>
                                 <label sclass="cursor-pointer underline me-2" value="Nhân viên đã duyệt:      "/>
-                                <label id="txtContractDoneByStaff" sclass="cursor-pointer underline font-bold text-[#C31229]" value="20 hợp đồng"/>
+                                <label id="txtContractDoneByStaff"
+                                       sclass="cursor-pointer underline font-bold text-[#C31229]" value="20 hợp đồng"/>
                             </div>
 
                         </div>
@@ -57,29 +62,34 @@
                             <div sclass="w-full flex mt-[12px]">
                                 <image sclass="me-4" src="/images/iconContract.png"/>
                                 <label sclass="cursor-pointer underline me-2" value="Số hợp đồng đã duyệt:      "/>
-                                <label id="txtContractExDone" sclass="cursor-pointer underline font-bold text-[#C31229]" value="20 hợp đồng"/>
+                                <label id="txtContractExDone" sclass="cursor-pointer underline font-bold text-[#C31229]"
+                                       value="20 hợp đồng"/>
                             </div>
                             <div sclass="w-full flex mt-[24px]">
                                 <image sclass="me-4" src="/images/iconContract.png"/>
                                 <label sclass="cursor-pointer underline me-2" value="Số hợp đồng chưa duyệt:      "/>
-                                <label  id="txtContractExPending" sclass="cursor-pointer underline font-bold text-[#C31229]" value="20 hợp đồng"/>
+                                <label id="txtContractExPending"
+                                       sclass="cursor-pointer underline font-bold text-[#C31229]" value="20 hợp đồng"/>
                             </div>
 
                             <div sclass="w-full flex mt-[24px]">
                                 <image sclass="me-4" src="/images/iconContract.png"/>
                                 <label sclass="cursor-pointer underline me-2" value="Tổng số hợp đồng:      "/>
-                                <label id="txtContractExTotal" sclass="cursor-pointer underline font-bold text-[#C31229]" value="20 hợp đồng"/>
+                                <label id="txtContractExTotal"
+                                       sclass="cursor-pointer underline font-bold text-[#C31229]" value="20 hợp đồng"/>
                             </div>
                             <div sclass="w-full flex mt-[24px]">
                                 <image sclass="me-4" src="/images/iconContract.png"/>
                                 <label sclass="cursor-pointer underline me-2" value="Lãnh đạo đã duyệt:      "/>
-                                <label id="txtContractExDoneByManager" sclass="cursor-pointer underline font-bold text-[#C31229]" value="20 hợp đồng"/>
+                                <label id="txtContractExDoneByManager"
+                                       sclass="cursor-pointer underline font-bold text-[#C31229]" value="20 hợp đồng"/>
                             </div>
 
                             <div sclass="w-full flex mt-[24px]">
                                 <image sclass="me-4" src="/images/iconContract.png"/>
                                 <label sclass="cursor-pointer underline me-2" value="Nhân viên đã duyệt:      "/>
-                                <label id="txtContractExDoneByStaff" sclass="cursor-pointer underline font-bold text-[#C31229]" value="20 hợp đồng"/>
+                                <label id="txtContractExDoneByStaff"
+                                       sclass="cursor-pointer underline font-bold text-[#C31229]" value="20 hợp đồng"/>
                             </div>
 
                         </div>
@@ -92,12 +102,13 @@
                             <label sclass="text-light font-semibold" value="Khai báo hợp đồng"/>
                         </div>
                         <div sclass="p-[20px]">
-                            <div sclass="w-full flex mt-[12px]">
+                            <div sclass="w-full flex mt-[12px]"  onClick='Executions.sendRedirect("/contractUI.zul")'>
                                 <image sclass="me-4" src="/images/addcontracticon.png"/>
-                                <label sclass="cursor-pointer underline me-2 mt-1" value="Khai báo hợp đồng nội bộ:      "/>
+                                <label sclass="cursor-pointer underline me-2 mt-1"
+                                       value="Khai báo hợp đồng nội bộ:      "/>
                                 <image src="/images/iconadd.png"/>
                             </div>
-                            <div sclass="w-full flex mt-[24px]">
+                            <div sclass="w-full flex mt-[24px]" onClick='Executions.sendRedirect("/contractUI.zul")'>
                                 <image sclass="me-4" src="/images/addcontracticon.png"/>
                                 <label sclass="cursor-pointer underline me-2 mt-1"
                                        value="Khai báo hợp đồng khách hàng:      "/>

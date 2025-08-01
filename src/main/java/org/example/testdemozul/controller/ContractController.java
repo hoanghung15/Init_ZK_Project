@@ -52,17 +52,18 @@ public class ContractController extends SelectorComposer<Component> {
     public void doAfterCompose(Component comp) throws Exception {
         super.doAfterCompose(comp);
 
-        int contractDone = contractDAO.getAllContractsWithScopeAndStatus("Nội bộ", "DONE").size();
-        int totalContractInternal = contractDAO.getAllContractsWithScopeAndStatus("Nội bộ", null).size();
+        int contractDone = contractDAO.getAllContractWithFilter(null,"DONE", null, "Nội bộ",null).size() ;
+        int totalContractInternal = contractDAO.getAllContractWithFilter(null,null, null, "Nội bộ",null).size() ;
+        System.out.println(totalContractInternal);
         int contractPending = totalContractInternal - contractDone;
-        int contractDoneByManager = contractDAO.getAllContractsWithRoleScopeStatus("Trưởng phòng", "Nội bộ", "DONE").size();
-        int contractDoneByStaff = contractDAO.getAllContractsWithRoleScopeStatus("Nhân viên kinh doanh", "Nội bộ", "DONE").size();
+        int contractDoneByManager = contractDAO.getAllContractWithFilter(null,"DONE", "Trưởng phòng", "Nội bộ",null).size() ;
+        int contractDoneByStaff = contractDAO.getAllContractWithFilter(null,"DONE", "Nhân viên kinh doanh", "Nội bộ",null).size() ;
 
-        int contractExDone = contractDAO.getAllContractsWithScopeAndStatus("Đối tác ngoài", "DONE").size();
-        int totalContractEx = contractDAO.getAllContractsWithScopeAndStatus("Đối tác ngoài", null).size();
+        int contractExDone = contractDAO.getAllContractWithFilter(null,"DONE", null, "Đối tác ngoài",null).size() ;
+        int totalContractEx = contractDAO.getAllContractWithFilter(null,null, null, "Đối tác ngoài",null).size() ;
         int contractExPending = totalContractEx - contractExDone;
-        int contractExDoneByManager = contractDAO.getAllContractsWithRoleScopeStatus("Trưởng phòng", "Đối tác ngoài", "DONE").size();
-        int contractExDoneByStaff = contractDAO.getAllContractsWithRoleScopeStatus("Nhân viên kinh doanh", "Đối tác ngoài", "DONE").size();
+        int contractExDoneByManager = contractDAO.getAllContractWithFilter(null,"DONE", "Trưởng phòng", "Đối tác ngoài",null).size() ;
+        int contractExDoneByStaff =  contractDAO.getAllContractWithFilter(null,"DONE", "Nhân viên kinh doanh", "Đối tác ngoài",null).size() ;
 
         txtContractDoneByStaff.setValue(String.valueOf(contractDoneByStaff));
         txtContractDoneByManager.setValue(String.valueOf(contractDoneByManager));
@@ -70,7 +71,6 @@ public class ContractController extends SelectorComposer<Component> {
         txtContractTotal.setValue(String.valueOf(totalContractInternal));
         txtContractPending.setValue(String.valueOf(contractPending));
 
-//ex
         txtContractExDoneByStaff.setValue(String.valueOf(contractExDoneByStaff));
         txtContractExDoneByManager.setValue(String.valueOf(contractExDoneByManager));
         txtContractExDone.setValue(String.valueOf(contractExDone));

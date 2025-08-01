@@ -226,54 +226,80 @@ public class ContractDAO {
         }
     }
 
-    public List<Contract> getAllContractWithSearch(String search) {
-        StringBuilder sql = new StringBuilder("SELECT * FROM contract WHERE 1=1 ");
-        List<Contract> contracts = new ArrayList<>();
-        if (search != null && !search.equals("")) {
+    public List<Contract> getAllContractWithFilter(String search, String status, String approver_role, String scope, String type) {
+        StringBuilder sql = new StringBuilder(
+                "SELECT c.* FROM contract c " +
+                        "JOIN staff s ON c.staff_id = s.id " +
+                        "WHERE 1=1 "
+        );
+        List<Object> params = new ArrayList<>(); // Dùng để lưu tham số cho PreparedStatement
+
+        if (search != null && !search.trim().isEmpty()) {
             sql.append(" AND number_contract LIKE ?");
+            params.add("%" + search + "%");
         }
+
+        if (status != null && !status.trim().isEmpty()) {
+            sql.append(" AND status = ?");
+            params.add(status);
+        }
+
+        if (approver_role != null && !approver_role.trim().isEmpty()) {
+            sql.append(" AND s.role = ?");
+            params.add(approver_role);
+        }
+        if(scope != null && !scope.trim().isEmpty()) {
+            sql.append(" AND c.contract_scope = ?");
+            params.add(scope);
+        }
+
+        if (type != null && !type.trim().isEmpty()) {
+            sql.append(" AND c.contract_type = ?");
+            params.add(type);
+        }
+
+        List<Contract> contracts = new ArrayList<>();
+
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql.toString())) {
-
-            if (search != null && !search.isEmpty()) {
-                ps.setString(1, search);
+             PreparedStatement stmt = conn.prepareStatement(sql.toString())) {
+            for (int i = 0; i < params.size(); i++) {
+                stmt.setObject(i + 1, params.get(i));
             }
 
-            ResultSet resultSet = ps.executeQuery();
-            while (resultSet.next()) {
-                Contract contract = new Contract();
-                contract.setId(resultSet.getInt("id"));
-                contract.setNumberContract(resultSet.getString("number_contract"));
-                contract.setName(resultSet.getString("name"));
-                contract.setEmailA(resultSet.getString("email_a"));
-                contract.setEmailB(resultSet.getString("email_b"));
-                contract.setPhoneA(resultSet.getString("phone_a"));
-                contract.setPhoneB(resultSet.getString("phone_b"));
-                contract.setStaffID(resultSet.getInt("staff_id"));
-                contract.setContractType(resultSet.getString("contract_type"));
-                contract.setContractScope(resultSet.getString("contract_scope"));
-                contract.setStartDate(resultSet.getDate("start_date"));
-                contract.setEndDate(resultSet.getDate("end_date"));
-                contract.setPaymentMethod(resultSet.getString("payment_method"));
-                contract.setStatus(resultSet.getString("status"));
-                contract.setFile_data(resultSet.getString("file_data"));
-
-                contracts.add(contract);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Contract c = new Contract();
+                c.setId(rs.getInt("id"));
+                c.setNumberContract(rs.getString("number_contract"));
+                c.setName(rs.getString("name"));
+                c.setStatus(rs.getString("status"));
+                c.setContractScope(rs.getString("contract_scope"));
+                c.setEmailA(rs.getString("email_a"));
+                c.setPhoneA(rs.getString("phone_a"));
+                c.setFile_data(rs.getString("file_data"));
+                c.setStaffID(rs.getInt("staff_id"));
+                c.setContractType(rs.getString("contract_type"));
+                c.setPaymentMethod(rs.getString("payment_method"));
+                c.setEndDate(rs.getDate("end_date"));
+                c.setEmailB(rs.getString("email_b"));
+                c.setPhoneB(rs.getString("phone_b"));
+                c.setStartDate(rs.getDate("start_date"));
+                contracts.add(c);
             }
-        } catch (SQLException e) {
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        for (Contract contract : contracts) {
-            System.out.println(contract.toString());
-        }
+
         return contracts;
     }
 
     public static void main(String[] args) {
         ContractDAO contractDAO = new ContractDAO();
-        System.out.println(contractDAO.getAllContracts().size());
-        System.out.println(contractDAO.getAllContractsWithScopeAndStatus(null, "DONE").size());
-        System.out.println(contractDAO.getAllContractsWithRoleScopeStatus("Trưởng phòng", "Nội bộ", "DONE").size());
+        List<Contract> contracts = contractDAO.getAllContractWithFilter(null, "PENDING", null,null,null);
+        for (Contract contract : contracts) {
+            System.out.println(contract.toString());
+        }
     }
 
 }

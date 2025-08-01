@@ -13,6 +13,9 @@ public class Staff {
         this.role = role;
     }
 
+    public Staff() {
+    }
+
     public int getId() {
         return id;
     }

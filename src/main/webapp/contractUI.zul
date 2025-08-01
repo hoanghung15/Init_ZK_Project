@@ -79,7 +79,8 @@
                                 </row>
                                 <row>
                                     <label value="Người duyệt:"/>
-                                    <textbox id="txtApprover" width="100%"/>
+                                    <combobox id="cbApprover" width="100%">
+                                    </combobox>
                                 </row>
                                 <row>
                                     <label value="Loại hợp đồng:"/>
@@ -129,7 +130,33 @@
         </div>
 
         <!--   Search     -->
-        <textbox id="searchBox" placeholder="Nhập từ khóa..." width="100%" sclass="mt-4"/>
+        <div sclass="w-full justify-between flex mt-4">
+            <textbox id="searchBox" placeholder="Nhập từ khóa..." width="30%" sclass="me-4"/>
+            <combobox id="cbRoleFilter" placeholder="Người duyệt" sclass="w-[20%] me-4">
+                <comboitem value="" label="Tất cả"/>
+                <comboitem value="Nhân viên kinh doanh" label="Nhân viên DB"/>
+                <comboitem value="Trưởng phòng" label="Trưởng phòng"/>
+            </combobox>
+
+            <combobox id="cbStatusFilter" placeholder="Trạng thái" sclass="w-[20%] me-4">
+                <comboitem value="" label="Tất cả"/>
+                <comboitem value="PENDING" label="Đang chờ"/>
+                <comboitem value="DONE" label="Hoàn thành"/>
+            </combobox>
+
+            <combobox id="cbScopeFilter" placeholder="Phạm vi hợp đồng" sclass="w-[20%] me-4">
+                <comboitem value="" label="Tất cả"/>
+                <comboitem value="Nội bộ" label="Nội bộ"/>
+                <comboitem value="Đối tác ngoài" label="Đối tác ngoài"/>
+            </combobox>
+
+            <combobox id="cbTypeFilter" placeholder="Loại hợp đồng" sclass="w-[20%] me-4">
+                <comboitem value="" label="Tất cả"/>
+                <comboitem value="Phát triển" label="Dịch vụ"/>
+                <comboitem value="Hợp đồng mua bán" label="Mua bán"/>
+                <comboitem value="Hợp đồng mua bán" label="Phát triển"/>
+            </combobox>
+        </div>
 
         <!-- Danh sách hợp đồng -->
         <div sclass="w-full mt-6">

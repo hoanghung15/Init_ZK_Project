@@ -7,7 +7,9 @@ import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
 import com.google.firebase.FirebaseApp;
 import org.example.testdemozul.dao.ContractDAO;
+import org.example.testdemozul.dao.StaffDAO;
 import org.example.testdemozul.model.Contract;
+import org.example.testdemozul.model.Staff;
 import org.example.testdemozul.security.FirebaseConfig;
 import org.zkoss.util.media.Media;
 import org.zkoss.zk.ui.Component;
@@ -28,7 +30,7 @@ public class DetailPageContractController extends SelectorComposer<Component> {
     @Wire
     private Textbox txtNumberContract, txtNameContract, txtEmailA, txtPhoneA, txtEmailB, txtPhoneB, txtApprover, searchBox;
     @Wire
-    private Combobox cbStatus, cbScope, cbContractType, cbPaymentMethod;
+    private Combobox cbStatus, cbScope, cbContractType, cbPaymentMethod, cbApprover, cbRoleFilter,cbScopeFilter, cbStatusFilter, cbTypeFilter;
     @Wire
     private Datebox dbStartDate, dbEndDate;
     @Wire
@@ -38,8 +40,17 @@ public class DetailPageContractController extends SelectorComposer<Component> {
     private Button btnRefreshForm, btnSaveForm, btnCancel;
 
     private ContractDAO contractDAO = new ContractDAO();
+    private StaffDAO staffDAO = new StaffDAO();
+
     private List<Contract> contracts;
+
     private String fileURL = null;
+    private String searchTmp = null;
+    private String roleTmp = null;
+    private String statusTmp = null;
+    private String scopeTmp = null;
+    private String typeTmp = null;
+
     private Integer currentIdContract;
 
     @Override
@@ -48,7 +59,7 @@ public class DetailPageContractController extends SelectorComposer<Component> {
         FirebaseConfig.initFirebase();
 
         // Load danh sách hợp đồng
-        contracts = contractDAO.getAllContracts();
+        contracts = contractDAO.getAllContractWithFilter(null,null,null,null,null);
         ListModelList<Contract> model = new ListModelList<>(contracts);
         contractListbox.setModel(model);
 
@@ -128,6 +139,7 @@ public class DetailPageContractController extends SelectorComposer<Component> {
 
         // Khởi tạo upload file
         uploadFile();
+        applyComboxBoxUser();
 
         // Nút refresh form
         btnRefreshForm.addEventListener(Events.ON_CLICK, e -> cleanForm());
@@ -142,12 +154,50 @@ public class DetailPageContractController extends SelectorComposer<Component> {
             cleanForm();
         });
 
+        // Search box
         searchBox.addEventListener(Events.ON_CHANGE, event -> {
-            contracts = contractDAO.getAllContractWithSearch(searchBox.getText());
-            System.out.println(contracts.size());
+            searchTmp = searchBox.getValue();
+            contracts = contractDAO.getAllContractWithFilter(searchTmp, statusTmp, roleTmp, scopeTmp, typeTmp);
             ListModelList<Contract> newModel = new ListModelList<>(contracts);
             contractListbox.setModel(newModel);
+        });
 
+        //cb status filter
+        cbStatusFilter.addEventListener(Events.ON_CHANGE, event -> {
+            statusTmp = cbStatusFilter.getSelectedItem() != null
+                    ? cbStatusFilter.getSelectedItem().getValue()
+                    : null;
+
+            contracts = contractDAO.getAllContractWithFilter(searchTmp, statusTmp, roleTmp, scopeTmp, typeTmp);
+            contractListbox.setModel(new ListModelList<>(contracts));
+        });
+
+        //cb scopy filter
+        cbScopeFilter.addEventListener(Events.ON_CHANGE, event -> {
+            scopeTmp = cbScopeFilter.getSelectedItem() != null
+                    ? cbScopeFilter.getSelectedItem().getValue()
+                    : null;
+            contracts = contractDAO.getAllContractWithFilter(searchTmp, statusTmp, roleTmp, scopeTmp, typeTmp);
+            contractListbox.setModel(new ListModelList<>(contracts));
+        });
+
+        //cb TypeFilter
+        cbTypeFilter.addEventListener(Events.ON_CHANGE, event -> {
+            typeTmp = cbTypeFilter.getSelectedItem() != null
+                    ? cbTypeFilter.getSelectedItem().getValue()
+                    : null;
+            contracts = contractDAO.getAllContractWithFilter(searchTmp, statusTmp, roleTmp, scopeTmp, typeTmp);
+            contractListbox.setModel(new ListModelList<>(contracts));
+        });
+
+        //cb role filter
+        cbRoleFilter.addEventListener(Events.ON_CHANGE, event -> {
+            roleTmp = cbRoleFilter.getSelectedItem() != null
+                    ? cbRoleFilter.getSelectedItem().getValue()
+                    : null;
+
+            contracts = contractDAO.getAllContractWithFilter(searchTmp, statusTmp, roleTmp, scopeTmp, typeTmp);
+            contractListbox.setModel(new ListModelList<>(contracts));
         });
     }
 
@@ -163,10 +213,23 @@ public class DetailPageContractController extends SelectorComposer<Component> {
         txtPhoneA.setValue(c.getPhoneA());
         txtEmailB.setValue(c.getEmailB());
         txtPhoneB.setValue(c.getPhoneB());
-        txtApprover.setValue(String.valueOf(c.getStaffID()));
+
+        cbApprover.setItemRenderer((ComboitemRenderer<Staff>) (item, data, index) -> {
+            item.setLabel(data.getName());  // Hiển thị name
+            item.setValue(data.getId());    // Giá trị thực là ID
+        });
+
         cbContractType.setValue(c.getContractType());
         cbPaymentMethod.setValue(c.getPaymentMethod());
         fileURL = c.getFile_data();
+
+        cbApprover.setSelectedIndex(-1);
+        for (Comboitem item : cbApprover.getItems()) {
+            if (item.getValue().equals(c.getStaffID())) {
+                cbApprover.setSelectedItem(item);
+                break;
+            }
+        }
     }
 
     // Reset form
@@ -178,7 +241,6 @@ public class DetailPageContractController extends SelectorComposer<Component> {
         txtPhoneA.setValue("");
         txtEmailB.setValue("");
         txtPhoneB.setValue("");
-        txtApprover.setValue("");
 
         cbStatus.setSelectedIndex(-1);
         cbScope.setSelectedIndex(-1);
@@ -248,9 +310,12 @@ public class DetailPageContractController extends SelectorComposer<Component> {
         contract.setContractScope(cbScope.getValue());
         contract.setEmailA(txtEmailA.getValue());
         contract.setPhoneA(txtPhoneA.getValue());
-
         contract.setFile_data(fileURL);
-        contract.setStaffID(Integer.parseInt(txtApprover.getValue()));
+
+        if (cbApprover.getSelectedItem() != null) {
+            contract.setStaffID((Integer) cbApprover.getSelectedItem().getValue());
+        }
+
         contract.setContractType(cbContractType.getValue());
         contract.setPaymentMethod(cbPaymentMethod.getValue());
         contract.setEndDate(dbEndDate.getValue());
@@ -272,8 +337,13 @@ public class DetailPageContractController extends SelectorComposer<Component> {
         Executions.sendRedirect(null);
     }
 
-    // search form
-    private  void setSearchBoxContract(){
-
+    private void applyComboxBoxUser() {
+        List<Staff> staffList = staffDAO.getAllStaff();
+        cbApprover.getItems().clear();
+        for (Staff staff : staffList) {
+            Comboitem comboitem = new Comboitem(staff.getName());
+            comboitem.setValue(staff.getId());
+            comboitem.setParent(cbApprover);
+        }
     }
 }
