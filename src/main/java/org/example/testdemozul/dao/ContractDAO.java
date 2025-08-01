@@ -215,18 +215,59 @@ public class ContractDAO {
         }
     }
 
-    public void deleteContract(Integer id){
+    public void deleteContract(Integer id) {
         String sql = "DELETE FROM contract WHERE id = ?";
-        try(PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql)){
+        try (PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql)) {
             ps.setInt(1, id);
             int rows = ps.executeUpdate();
             System.out.println("Deleted rows: " + rows);
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
+    public List<Contract> getAllContractWithSearch(String search) {
+        StringBuilder sql = new StringBuilder("SELECT * FROM contract WHERE 1=1 ");
+        List<Contract> contracts = new ArrayList<>();
+        if (search != null && !search.equals("")) {
+            sql.append(" AND number_contract LIKE ?");
+        }
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+
+            if (search != null && !search.isEmpty()) {
+                ps.setString(1, search);
+            }
+
+            ResultSet resultSet = ps.executeQuery();
+            while (resultSet.next()) {
+                Contract contract = new Contract();
+                contract.setId(resultSet.getInt("id"));
+                contract.setNumberContract(resultSet.getString("number_contract"));
+                contract.setName(resultSet.getString("name"));
+                contract.setEmailA(resultSet.getString("email_a"));
+                contract.setEmailB(resultSet.getString("email_b"));
+                contract.setPhoneA(resultSet.getString("phone_a"));
+                contract.setPhoneB(resultSet.getString("phone_b"));
+                contract.setStaffID(resultSet.getInt("staff_id"));
+                contract.setContractType(resultSet.getString("contract_type"));
+                contract.setContractScope(resultSet.getString("contract_scope"));
+                contract.setStartDate(resultSet.getDate("start_date"));
+                contract.setEndDate(resultSet.getDate("end_date"));
+                contract.setPaymentMethod(resultSet.getString("payment_method"));
+                contract.setStatus(resultSet.getString("status"));
+                contract.setFile_data(resultSet.getString("file_data"));
+
+                contracts.add(contract);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        for (Contract contract : contracts) {
+            System.out.println(contract.toString());
+        }
+        return contracts;
+    }
 
     public static void main(String[] args) {
         ContractDAO contractDAO = new ContractDAO();

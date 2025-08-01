@@ -164,4 +164,25 @@ public class Contract {
     public void setPaymentMethod(String paymentMethod) {
         this.paymentMethod = paymentMethod;
     }
+
+    @Override
+    public String toString() {
+        return "Contract{" +
+                "id=" + id +
+                ", numberContract='" + numberContract + '\'' +
+                ", name='" + name + '\'' +
+                ", emailA='" + emailA + '\'' +
+                ", emailB='" + emailB + '\'' +
+                ", phoneA='" + phoneA + '\'' +
+                ", phoneB='" + phoneB + '\'' +
+                ", status='" + status + '\'' +
+                ", file_data='" + file_data + '\'' +
+                ", staffID=" + staffID +
+                ", contractType='" + contractType + '\'' +
+                ", contractScope='" + contractScope + '\'' +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", paymentMethod='" + paymentMethod + '\'' +
+                '}';
+    }
 }

@@ -26,7 +26,7 @@ public class DetailPageContractController extends SelectorComposer<Component> {
     private Listbox contractListbox;
 
     @Wire
-    private Textbox txtNumberContract, txtNameContract, txtEmailA, txtPhoneA, txtEmailB, txtPhoneB, txtApprover;
+    private Textbox txtNumberContract, txtNameContract, txtEmailA, txtPhoneA, txtEmailB, txtPhoneB, txtApprover, searchBox;
     @Wire
     private Combobox cbStatus, cbScope, cbContractType, cbPaymentMethod;
     @Wire
@@ -35,7 +35,7 @@ public class DetailPageContractController extends SelectorComposer<Component> {
     private Fileupload fileContract;
 
     @Wire
-    private Button btnRefreshForm, btnSaveForm,btnCancel;
+    private Button btnRefreshForm, btnSaveForm, btnCancel;
 
     private ContractDAO contractDAO = new ContractDAO();
     private List<Contract> contracts;
@@ -141,6 +141,14 @@ public class DetailPageContractController extends SelectorComposer<Component> {
         btnCancel.addEventListener(Events.ON_CLICK, event -> {
             cleanForm();
         });
+
+        searchBox.addEventListener(Events.ON_CHANGE, event -> {
+            contracts = contractDAO.getAllContractWithSearch(searchBox.getText());
+            System.out.println(contracts.size());
+            ListModelList<Contract> newModel = new ListModelList<>(contracts);
+            contractListbox.setModel(newModel);
+
+        });
     }
 
     // Đổ dữ liệu vào form khi sửa
@@ -163,6 +171,7 @@ public class DetailPageContractController extends SelectorComposer<Component> {
 
     // Reset form
     private void cleanForm() {
+        currentIdContract = null;
         txtNumberContract.setValue("");
         txtNameContract.setValue("");
         txtEmailA.setValue("");
@@ -260,5 +269,11 @@ public class DetailPageContractController extends SelectorComposer<Component> {
             contract.setId(currentIdContract);
             contractDAO.updateContract(contract);
         }
+        Executions.sendRedirect(null);
+    }
+
+    // search form
+    private  void setSearchBoxContract(){
+
     }
 }
