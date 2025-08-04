@@ -58,7 +58,7 @@ public class AssignTaskController extends SelectorComposer<Component> {
         // Load initial data
         staffList = staffDAO.getAllStaff();
         applyComboBoxStaff();
-        applyComboBoxAssignee();
+        applyAssigneeTask();
         applyComboboxContractName();
         applyCreatedBy();
         applyListTask();
@@ -80,7 +80,6 @@ public class AssignTaskController extends SelectorComposer<Component> {
                 staffList = staffDAO.getAllStaffByDepartment(selectedDepartment);
 
                 applyComboBoxStaff();
-                applyComboBoxAssignee();
             }
         });
     }
@@ -134,16 +133,20 @@ public class AssignTaskController extends SelectorComposer<Component> {
     /**
      * Load combobox nhân viên nhận task (Assignee)
      */
-    public void applyComboBoxAssignee() {
-        cbAssignee.getItems().clear();
-        if (staffList == null || staffList.isEmpty()) return;
+    private void applyAssigneeTask() {
+        User user = getUserLogin();
+        System.out.println("apply user: " + user);
 
-        for (Staff staff : staffList) {
-            Comboitem comboitem = new Comboitem(staff.getName());
-            comboitem.setValue(staff.getId());
+        cbAssignee.getItems().clear();
+
+        if (user != null) {
+            Comboitem comboitem = new Comboitem(user.getUsername());
+            comboitem.setValue(user.getId());
             comboitem.setParent(cbAssignee);
+
+            // Chọn luôn item này để hiển thị
+            cbAssignee.setSelectedItem(comboitem);
         }
-        cbAssignee.invalidate(); // refresh UI
     }
 
     /**
