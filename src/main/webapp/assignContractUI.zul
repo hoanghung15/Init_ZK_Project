@@ -158,10 +158,10 @@
                                         </cell>
                                     </row>
                                     <row>
-                                        <label value="Trạng thái(*)" style="color:red;"/>
+                                        <label value="Công việc(*)" style="color:red;"/>
                                         <cell colspan="3">
-                                            <combobox id="cbCreatorAssign" width="100%">
-                                                <comboitem label="---Tất cả---"/>
+                                            <combobox  width="100%">
+                                                <comboitem label="Lựa chọn công việc"/>
                                             </combobox>
                                         </cell>
 
@@ -189,8 +189,15 @@
                     <!-- Hàng 2 -->
                     <row>
                         <div width="100%">
-                            <label value="Danh sách công việc"/>
-                            <listbox id="taskListBox" sclass="custom-list" width="100%">
+                            <div width="100%" sclass="flex justify-between">
+                                <label value="Danh sách công việc"/>
+                                <combobox placeholder="Lọc người được giao">
+                                    <comboitem label="Tất cả"/>
+                                    <comboitem label="Đã giao cho NV"/>
+                                    <comboitem label="Chưa giao cho NV"/>
+                                </combobox>
+                            </div>
+                            <listbox id="taskListBox" sclass="custom-list mt-2" width="100%">
                                 <listhead>
                                     <listheader style="color:#767676;" label="STT" width="40px"/>
                                     <listheader style="color:#767676;" sclass="text-start" label="Loại "/>

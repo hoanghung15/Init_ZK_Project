@@ -49,6 +49,7 @@ public class AssignTaskController extends SelectorComposer<Component> {
 
     // Data
     private List<Staff> staffList;
+    private List<Task> taskList;
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
@@ -57,6 +58,8 @@ public class AssignTaskController extends SelectorComposer<Component> {
 
         // Load initial data
         staffList = staffDAO.getAllStaff();
+        taskList = assignTaskDAO.getAllAssignTask();
+
         applyComboBoxStaff();
         applyAssigneeTask();
         applyComboboxContractName();
@@ -194,7 +197,7 @@ public class AssignTaskController extends SelectorComposer<Component> {
      * Hiển thị danh sách task trong listbox
      */
     public void applyListTask() {
-        List<Task> taskList = assignTaskDAO.getAllAssignTask();
+
         ListModelList<Task> model = new ListModelList<>(taskList);
         taskListBox.setModel(model);
 
