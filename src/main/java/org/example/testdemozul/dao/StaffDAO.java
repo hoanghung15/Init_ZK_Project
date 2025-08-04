@@ -46,6 +46,25 @@ public class StaffDAO {
         return staffList;
     }
 
+    public Staff getStaffById(int id) {
+        Staff staff = new Staff();
+
+        String sql = "select * from staff where id = ?";
+
+        try(PreparedStatement statement = DBConnection.getConnection().prepareStatement(sql)) {
+            statement.setInt(1, id);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                staff.setId(rs.getInt("id"));
+                staff.setName(rs.getString("name"));
+                staff.setDepartment(rs.getString("department"));
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return staff;
+    }
+
     public static void main(String[] args) {
         StaffDAO staffDAO = new StaffDAO();
         System.out.println(staffDAO.getAllStaffByDepartment("DIGITAL").size());

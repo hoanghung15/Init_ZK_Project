@@ -29,7 +29,7 @@ public class AssignTaskController extends SelectorComposer<Component> {
 
     @Wire
     public Combobox cbStaffInfo, cbTypeContract, cbTypeTask, cbTypeDepartment,
-            cbStatusTask, cbCreatorTask, cbAssignee;
+            cbStatusTask, cbCreatorTask, cbAssignee, cbFilterStaff, cbIdTaskUnassign;
 
     @Wire
     public Datebox startDateTask, endDateTask, createdDateTask;
@@ -50,6 +50,9 @@ public class AssignTaskController extends SelectorComposer<Component> {
     // Data
     private List<Staff> staffList;
     private List<Task> taskList;
+    private List<Task> unAssignedTaskList;
+
+    private Integer tmpTaskId = null;
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
@@ -58,19 +61,29 @@ public class AssignTaskController extends SelectorComposer<Component> {
 
         // Load initial data
         staffList = staffDAO.getAllStaff();
-        taskList = assignTaskDAO.getAllAssignTask();
+        taskList = assignTaskDAO.getAllAssignTaskWithFilter(null);
+        unAssignedTaskList = assignTaskDAO.getAllAssignTaskWithFilter(-1);
 
         applyComboBoxStaff();
         applyAssigneeTask();
         applyComboboxContractName();
         applyCreatedBy();
+        applyUnassignTask();
+
+        // renderListTask
         applyListTask();
 
         // Button lưu
         btnSaveTaskForm.addEventListener(Events.ON_CLICK, event -> {
-            createTaskForm();
-            Messagebox.show("Tạo mới công việc");
-            Executions.sendRedirect(null);
+            if (tmpTaskId == null) {
+                createTaskForm();
+                Messagebox.show("Tạo mới công việc");
+                Executions.sendRedirect(null);
+            } else {
+                updateTaskForm();
+                Messagebox.show("Update");
+            }
+
         });
 
         // Event thay đổi phòng ban
@@ -78,22 +91,46 @@ public class AssignTaskController extends SelectorComposer<Component> {
             Comboitem selectedItem = cbTypeDepartment.getSelectedItem();
             if (selectedItem != null) {
                 String selectedDepartment = selectedItem.getValue();
-                System.out.println("Selected department: " + selectedDepartment);
-
                 staffList = staffDAO.getAllStaffByDepartment(selectedDepartment);
 
                 applyComboBoxStaff();
             }
         });
+
+        cbFilterStaff.addEventListener(Events.ON_CHANGE, event -> {
+            Comboitem selected = cbFilterStaff.getSelectedItem();
+            String value = selected != null ? selected.getValue() : "all";
+
+            switch (value) {
+                case "assigned":
+                    taskList = assignTaskDAO.getAllAssignTaskWithFilter(1);     // staff_id > 0
+                    break;
+                case "unassigned":
+                    taskList = assignTaskDAO.getAllAssignTaskWithFilter(-1);    // staff_id = 0
+                    break;
+                default:
+                    taskList = assignTaskDAO.getAllAssignTaskWithFilter(null);  // tất cả
+                    break;
+            }
+            // Đổ dữ liệu lên listbox
+            applyListTask();
+
+        });
+
+        taskListBox.addEventListener(Events.ON_SELECT, event -> {
+            if (taskListBox.getSelectedItem() != null) {
+                Task task = taskListBox.getSelectedItem().getValue();
+                tmpTaskId = task.getId();
+                fillForm(task);
+            }
+
+        });
     }
 
-    /**
-     * Load combobox tên hợp đồng
-     */
+    /*** Load combobox tên hợp đồng*/
     public void applyComboboxContractName() {
         List<Contract> taskList = contractDAO.getAllContractWithFilter(null, null, null, null, null);
         cbTypeContract.getItems().clear();
-
         for (Contract task : taskList) {
             Comboitem comboitem = new Comboitem(task.getName());
             comboitem.setValue(task.getId());
@@ -101,9 +138,7 @@ public class AssignTaskController extends SelectorComposer<Component> {
         }
     }
 
-    /**
-     * Set người tạo mặc định
-     */
+    /*** Set người tạo mặc định*/
     private void applyCreatedBy() {
         User user = getUserLogin();
         cbCreatorTask.getItems().clear();
@@ -118,9 +153,7 @@ public class AssignTaskController extends SelectorComposer<Component> {
         }
     }
 
-    /**
-     * Load combobox nhân viên chính
-     */
+    /*** Load combobox nhân viên chính*/
     public void applyComboBoxStaff() {
         cbStaffInfo.getItems().clear();
         if (staffList == null || staffList.isEmpty()) return;
@@ -133,12 +166,9 @@ public class AssignTaskController extends SelectorComposer<Component> {
         cbStaffInfo.invalidate(); // refresh UI
     }
 
-    /**
-     * Load combobox nhân viên nhận task (Assignee)
-     */
+    /*** Load combobox nhân viên giao task (Assignee)*/
     private void applyAssigneeTask() {
         User user = getUserLogin();
-        System.out.println("apply user: " + user);
 
         cbAssignee.getItems().clear();
 
@@ -152,9 +182,18 @@ public class AssignTaskController extends SelectorComposer<Component> {
         }
     }
 
-    /**
-     * Lưu task mới
-     */
+
+    /*** Load comboBox task chưa được giao (unassign) */
+    private void applyUnassignTask() {
+        cbIdTaskUnassign.getItems().clear();
+        for (Task task : unAssignedTaskList) {
+            Comboitem comboitem = new Comboitem(String.valueOf(task.getId()));
+            comboitem.setValue(task.getId());
+            comboitem.setParent(cbIdTaskUnassign);
+        }
+    }
+
+    /*** Lưu task mới*/
     public void createTaskForm() {
         Task task = new Task();
         task.setType(cbTypeTask.getValue());
@@ -179,9 +218,33 @@ public class AssignTaskController extends SelectorComposer<Component> {
         assignTaskDAO.creatNewAssignTask(task);
     }
 
-    /**
-     * Lấy thông tin user đang login
-     */
+    public void updateTaskForm() {
+        Task task = new Task();
+        task.setId(tmpTaskId);
+        task.setType(cbTypeTask.getValue());
+        task.setDepartment(cbTypeDepartment.getValue());
+        task.setStartDate(startDateTask.getValue());
+        task.setEndDate(endDateTask.getValue());
+        task.setDescription(txtDescriptionTask.getValue());
+        task.setStatus(cbStatusTask.getValue());
+        task.setUpdateAt(createdDateTask.getValue()); // java.util.Date
+
+        // Lấy giá trị từ combobox
+        if (cbStaffInfo.getSelectedItem() != null) {
+            task.setStaff_id(cbStaffInfo.getSelectedItem().getValue());
+        }
+        if (cbTypeContract.getSelectedItem() != null) {
+            task.setContract_id(cbTypeContract.getSelectedItem().getValue());
+        }
+        if (cbCreatorTask.getSelectedItem() != null) {
+            task.setCreatBy_id(cbCreatorTask.getSelectedItem().getValue());
+        }
+
+        System.out.println("Test " + task.toString());
+        assignTaskDAO.updateAssignTask(task);
+    }
+
+    /*** Lấy thông tin user đang login*/
     public User getUserLogin() {
         String token = cookieService.getTokenFromCookie();
         if (token == null) return null;
@@ -193,9 +256,7 @@ public class AssignTaskController extends SelectorComposer<Component> {
         return userDAO.getUser(username);
     }
 
-    /**
-     * Hiển thị danh sách task trong listbox
-     */
+    /*** Hiển thị danh sách task trong listbox*/
     public void applyListTask() {
 
         ListModelList<Task> model = new ListModelList<>(taskList);
@@ -206,6 +267,7 @@ public class AssignTaskController extends SelectorComposer<Component> {
             Contract contract = contractDAO.getContractById(task.getContract_id());
 
             new Listcell(String.valueOf(index + 1)).setParent(item);
+            new Listcell(String.valueOf(task.getId())).setParent(item);
             new Listcell(task.getType() != null ? task.getType() : "").setParent(item);
             new Listcell(contract != null ? contract.getNumberContract() : "").setParent(item);
 
@@ -214,7 +276,48 @@ public class AssignTaskController extends SelectorComposer<Component> {
             new Listcell(task.getEndDate() != null ? sdf.format(task.getEndDate()) : "").setParent(item);
 
             new Listcell(task.getStatus() != null ? task.getStatus() : "").setParent(item);
-            new Listcell(getUserLogin() != null ? getUserLogin().getUsername() : "").setParent(item);
+
         });
     }
+
+    public void fillForm(Task task) {
+        clearForm();
+
+        Staff staff = staffDAO.getStaffById(task.getStaff_id());
+        Contract contract = contractDAO.getContractById(task.getContract_id());
+
+        // Set giá trị cho các field
+        cbTypeTask.setValue(task.getType());
+        cbTypeDepartment.setValue(staff.getDepartment());
+        txtDescriptionTask.setValue(task.getDescription());
+        startDateTask.setValue(task.getStartDate());
+        endDateTask.setValue(task.getEndDate());
+        cbStatusTask.setValue(task.getStatus());
+        createdDateTask.setValue(task.getStartDate());
+
+        // Chọn nhân viên và hợp đồng đã có trong combobox
+        selectComboboxByValue(cbStaffInfo, staff.getId());
+        selectComboboxByValue(cbTypeContract, contract.getId());
+    }
+
+
+    public void clearForm() {
+        // Xóa các Textbox và Datebox
+        txtDescriptionTask.setValue("");
+        startDateTask.setValue(null);
+        endDateTask.setValue(null);
+        cbStatusTask.setValue("");
+        createdDateTask.setValue(null);
+    }
+    private void selectComboboxByValue(Combobox combobox, Object value) {
+        for (Comboitem item : combobox.getItems()) {
+            if (item.getValue().equals(value)) {
+                combobox.setSelectedItem(item);
+                return;
+            }
+        }
+        // Nếu không tìm thấy, bỏ chọn
+        combobox.setSelectedItem(null);
+    }
+
 }

@@ -42,10 +42,53 @@ public class AssignTaskDAO {
         }
     }
 
+    /** Update task trong DB */
+    public void updateAssignTask(Task task) {
+        String sql = "UPDATE task SET type = ?, department = ?, description = ?, startDate = ?, endDate = ?, " +
+                "updatedAt = ?, status = ?, creatBy_id = ?, staff_id = ?, contract_id = ? " +
+                "WHERE id = ?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, task.getType());
+            ps.setString(2, task.getDepartment());
+            ps.setString(3, task.getDescription());
+
+            // Convert java.util.Date -> java.sql.Date / Timestamp
+            ps.setDate(4, new java.sql.Date(task.getStartDate().getTime()));        // startDate DATE
+            ps.setDate(5, new java.sql.Date(task.getEndDate().getTime()));          // endDate DATE
+            ps.setTimestamp(6, new java.sql.Timestamp(task.getUpdateAt().getTime())); // updateAt DATETIME/TIMESTAMP
+
+            ps.setString(7, task.getStatus());
+            ps.setInt(8, task.getCreatBy_id());
+            ps.setInt(9, task.getStaff_id());
+            ps.setInt(10, task.getContract_id());
+            ps.setInt(11, task.getId()); // WHERE id = ?
+
+            int rows = ps.executeUpdate();
+            System.out.println("Update rows: " + rows);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     /** Lấy tất cả Task */
-    public List<Task> getAllAssignTask() {
-        String sql = "SELECT * FROM task";
+    public List<Task> getAllAssignTaskWithFilter(Integer filter){
         List<Task> tasks = new ArrayList<>();
+        String sql = "SELECT * FROM task";
+
+        if (filter != null) {
+            if (filter == -1) {
+                // -1 Chưa giao cho NV
+                sql += " WHERE staff_id = 0";
+            } else if (filter == 1) {
+                // Đã giao cho NV
+                sql += " WHERE staff_id > 0";
+            }
+
+        }
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -53,6 +96,7 @@ public class AssignTaskDAO {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Task task = new Task();
+                task.setId(rs.getInt("id"));
                 task.setContract_id(rs.getInt("contract_id"));
                 task.setType(rs.getString("type"));
                 task.setDepartment(rs.getString("department"));
@@ -74,5 +118,12 @@ public class AssignTaskDAO {
         }
 
         return tasks;
+    }
+
+    public static void main(String[] args) {
+        AssignTaskDAO assignTaskDAO = new AssignTaskDAO();
+        for (Task task : assignTaskDAO.getAllAssignTaskWithFilter(1)) {
+            System.out.println(task.toString());
+        }
     }
 }

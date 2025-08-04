@@ -188,7 +188,7 @@ public class ContractDAO {
 
     public static void main(String[] args) {
         ContractDAO contractDAO = new ContractDAO();
-        List<Contract> contracts = contractDAO.getAllContractWithFilter(null, "PENDING", null, null, null);
+        List<Contract> contracts = contractDAO.getAllContractWithFilter(null, null, null, null, null);
         for (Contract contract : contracts) {
             System.out.println(contract.toString());
         }

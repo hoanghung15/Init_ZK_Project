@@ -72,12 +72,11 @@
                                     </row>
 
                                     <row>
-                                        <label value="Trạng thái(*)" style="color:red;"/>
+                                        <label value="Công việc(*)" style="color:red;"/>
                                         <combobox id="cbStatusTask" width="100%">
-                                            <comboitem label="---Tất cả---"/>
-                                            <comboitem label="Hoàn thành"/>
-                                            <comboitem label="Vừa giao"/>
-                                            <comboitem label="Đang chờ hoàn thành"/>
+                                            <comboitem label="Đóng dấu"/>
+                                            <comboitem label="Đối soát hợp đồng "/>
+                                            <comboitem label="Tạo văn bản hợp đồng"/>
                                         </combobox>
                                         <label value="Người tạo"/>
                                         <combobox id="cbCreatorTask" width="100%"/>
@@ -158,9 +157,9 @@
                                         </cell>
                                     </row>
                                     <row>
-                                        <label value="Công việc(*)" style="color:red;"/>
+                                        <label value="Mã Công việc(*)" style="color:red;"/>
                                         <cell colspan="3">
-                                            <combobox  width="100%">
+                                            <combobox id="cbIdTaskUnassign" width="100%">
                                                 <comboitem label="Lựa chọn công việc"/>
                                             </combobox>
                                         </cell>
@@ -191,21 +190,22 @@
                         <div width="100%">
                             <div width="100%" sclass="flex justify-between">
                                 <label value="Danh sách công việc"/>
-                                <combobox placeholder="Lọc người được giao">
-                                    <comboitem label="Tất cả"/>
-                                    <comboitem label="Đã giao cho NV"/>
-                                    <comboitem label="Chưa giao cho NV"/>
+                                <combobox id="cbFilterStaff" placeholder="Lọc người được giao">
+                                    <comboitem label="Tất cả" value="all"/>
+                                    <comboitem label="Đã giao cho NV" value="assigned"/>
+                                    <comboitem label="Chưa giao cho NV" value="unassigned"/>
                                 </combobox>
                             </div>
                             <listbox id="taskListBox" sclass="custom-list mt-2" width="100%">
                                 <listhead>
                                     <listheader style="color:#767676;" label="STT" width="40px"/>
+                                    <listheader style="color:#767676;" sclass="text-start" label="Mã cv"/>
                                     <listheader style="color:#767676;" sclass="text-start" label="Loại "/>
                                     <listheader style="color:#767676;" sclass="text-start" label="Mã hợp đồng"/>
                                     <listheader style="color:#767676;" sclass="text-start" label="Từ"/>
                                     <listheader style="color:#767676;" sclass="text-start" label="Đến"/>
-                                    <listheader style="color:#767676;" sclass="text-start" label="Trạng thái"/>
-                                    <listheader style="color:#767676;" sclass="text-start" label="Người tạo"/>
+                                    <listheader style="color:#767676;" sclass="text-start" label="Công việc"/>
+
                                 </listhead>
                             </listbox>
                         </div>
