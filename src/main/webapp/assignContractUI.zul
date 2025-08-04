@@ -34,7 +34,7 @@
                                     <row>
                                         <label value="Loại"/>
                                         <combobox id="cbTypeTask" width="100%">
-                                             <comboitem label="---Tất cả---"/>
+                                            <comboitem label="---Tất cả---"/>
                                             <comboitem label="Đối soát định kỳ"/>
                                             <comboitem label="Điều chỉnh hợp đồng"/>
                                             <comboitem label="Điều chỉnh biểu mẫu"/>
@@ -42,9 +42,9 @@
                                         <label value="Phòng ban"/>
                                         <combobox id="cbTypeDepartment" width="100%">
                                             <comboitem label="---Tất cả---"/>
-                                            <comboitem label="Sale"/>
-                                            <comboitem label="CSVC"/>
-                                            <comboitem label="DIGITAL"/>
+                                            <comboitem value="SALE" label="SALE"/>
+                                            <comboitem value="CSVC" label="CSVC"/>
+                                            <comboitem value="DIGITAL" label="DIGITAL"/>
                                         </combobox>
                                     </row>
 
@@ -122,7 +122,7 @@
                                 <rows>
                                     <row>
                                         <label value="Người giao việc"/>
-                                        <combobox width="100%">
+                                        <combobox id="cbAssignee" width="100%">
                                             <comboitem label="---Tất cả---"/>
                                         </combobox>
                                         <label value="Nhân viên"/>
@@ -190,13 +190,13 @@
                     <row>
                         <div width="100%">
                             <label value="Danh sách công việc"/>
-                            <listbox sclass="custom-list" width="100%">
+                            <listbox id="taskListBox" sclass="custom-list" width="100%">
                                 <listhead>
-                                    <listheader style="color:#767676;" label="STT" width="50px"/>
+                                    <listheader style="color:#767676;" label="STT" width="40px"/>
                                     <listheader style="color:#767676;" sclass="text-start" label="Loại "/>
-                                    <listheader style="color:#767676;" sclass="text-start" label="Hợp đồng"/>
-                                    <listheader style="color:#767676;" sclass="text-start" label="Từ ngày"/>
-                                    <listheader style="color:#767676;" sclass="text-start" label="Đến ngày"/>
+                                    <listheader style="color:#767676;" sclass="text-start" label="Mã hợp đồng"/>
+                                    <listheader style="color:#767676;" sclass="text-start" label="Từ"/>
+                                    <listheader style="color:#767676;" sclass="text-start" label="Đến"/>
                                     <listheader style="color:#767676;" sclass="text-start" label="Trạng thái"/>
                                     <listheader style="color:#767676;" sclass="text-start" label="Người tạo"/>
                                 </listhead>
@@ -220,7 +220,5 @@
                 </rows>
             </grid>
         </div>
-
-
     </div>
 </zk>

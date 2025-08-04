@@ -26,4 +26,29 @@ public class StaffDAO {
         }
         return staffList;
     }
+
+    public List<Staff> getAllStaffByDepartment(String department) {
+        List<Staff> staffList = new ArrayList<>();
+        String sql = "select * from staff where department LIKE ?";
+        try (PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql)) {
+            ps.setString(1, department);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Staff staff = new Staff();
+                staff.setId(rs.getInt("id"));
+                staff.setName(rs.getString("name"));
+                staffList.add(staff);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return staffList;
+    }
+
+    public static void main(String[] args) {
+        StaffDAO staffDAO = new StaffDAO();
+        System.out.println(staffDAO.getAllStaffByDepartment("DIGITAL").size());
+    }
+
 }
