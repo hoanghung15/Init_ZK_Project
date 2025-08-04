@@ -27,7 +27,7 @@
             <label value="Quản lý hợp đồng" sclass="cursor-pointer hover:underline  me-3 "
                    onClick='Executions.sendRedirect("/contractUI.zul")'/>
             <label value="Quản lý giao việc" sclass="cursor-pointer hover:underline  me-3 "
-                   onClick='Executions.sendRedirect("/other.zul")'/>
+                   onClick='Executions.sendRedirect("/assignContractUI.zul")'/>
             <label value="Quản lý biên bản hóa đơn" sclass="cursor-pointer hover:underline  me-3 "
                    onClick='Executions.sendRedirect("/other.zul")'/>
             <label value="Báo cáo" sclass="cursor-pointer hover:underline  me-3 "

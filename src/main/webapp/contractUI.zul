@@ -134,7 +134,7 @@
             <textbox id="searchBox" placeholder="Nhập từ khóa..." width="30%" sclass="me-4"/>
             <combobox id="cbRoleFilter" placeholder="Người duyệt" sclass="w-[20%] me-4">
                 <comboitem value="" label="Tất cả"/>
-                <comboitem value="Nhân viên kinh doanh" label="Nhân viên DB"/>
+                <comboitem value="Nhân viên" label="Nhân viên DB"/>
                 <comboitem value="Trưởng phòng" label="Trưởng phòng"/>
             </combobox>
 

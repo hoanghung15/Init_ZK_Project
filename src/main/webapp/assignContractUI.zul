@@ -1,0 +1,226 @@
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <style src="/css/tailwind.css"/>
+    <style src="/css/contractDetailPage.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" type="text/javascript"/>
+
+    <include src="/WEB-INF/page-component/mainHeader.zul"/>
+
+    <div apply="org.example.testdemozul.controller.AssignTaskController" sclass="w-full h-full pt-[24px] px-[80px]">
+        <!-- Tiêu đề -->
+        <div width="100%">
+            <label sclass="font-bold text-[16px]" value="QUẢN LÝ GIAO VIỆC"/>
+        </div>
+
+        <div sclass="w-full mt-4">
+            <grid width="100%">
+                <columns>
+                    <column width="50%"/>
+                    <column width="50%"/>
+                </columns>
+                <rows>
+                    <!-- Hàng 1 -->
+                    <row>
+                        <!-- H1 C1: Thông tin công việc -->
+                        <div width="100%">
+                            <label value="Thông tin công việc" style=" margin-bottom:5px;"/>
+                            <grid width="100%" sclass="compact-grid">
+                                <columns>
+                                    <column width="20%"/>
+                                    <column width="30%"/>
+                                    <column width="20%"/>
+                                    <column width="30%"/>
+                                </columns>
+                                <rows>
+                                    <row>
+                                        <label value="Loại"/>
+                                        <combobox id="cbTypeTask" width="100%">
+                                             <comboitem label="---Tất cả---"/>
+                                            <comboitem label="Đối soát định kỳ"/>
+                                            <comboitem label="Điều chỉnh hợp đồng"/>
+                                            <comboitem label="Điều chỉnh biểu mẫu"/>
+                                        </combobox>
+                                        <label value="Phòng ban"/>
+                                        <combobox id="cbTypeDepartment" width="100%">
+                                            <comboitem label="---Tất cả---"/>
+                                            <comboitem label="Sale"/>
+                                            <comboitem label="CSVC"/>
+                                            <comboitem label="DIGITAL"/>
+                                        </combobox>
+                                    </row>
+
+                                    <row>
+                                        <label value="Hợp đồng"/>
+                                        <combobox id="cbTypeContract" width="100%"/>
+                                        <label value="Nhân viên"/>
+                                        <combobox id="cbStaffInfo" width="100%">
+                                            <comboitem label="---Tất cả---"/>
+                                        </combobox>
+                                    </row>
+
+                                    <row>
+                                        <label value="Từ ngày"/>
+                                        <datebox id="startDateTask" width="100%"/>
+                                        <label value="Đến ngày"/>
+                                        <datebox id="endDateTask" width="100%"/>
+                                    </row>
+
+                                    <row>
+                                        <label value="Mô tả"/>
+                                        <cell colspan="3">
+                                            <textbox id="txtDescriptionTask" multiline="true" rows="2" width="100%"/>
+                                        </cell>
+                                    </row>
+
+                                    <row>
+                                        <label value="Trạng thái(*)" style="color:red;"/>
+                                        <combobox id="cbStatusTask" width="100%">
+                                            <comboitem label="---Tất cả---"/>
+                                            <comboitem label="Hoàn thành"/>
+                                            <comboitem label="Vừa giao"/>
+                                            <comboitem label="Đang chờ hoàn thành"/>
+                                        </combobox>
+                                        <label value="Người tạo"/>
+                                        <combobox id="cbCreatorTask" width="100%"/>
+                                    </row>
+
+                                    <row>
+                                        <label value="Ngày tạo"/>
+                                        <cell colspan="3">
+                                            <datebox id="createdDateTask" width="100%"/>
+                                        </cell>
+                                    </row>
+
+                                    <row>
+                                        <cell colspan="4" style="text-align:center;">
+                                            <div sclass="flex justify-center gap-4 mt-2">
+                                                <button id="btnRefreshForm"
+                                                        sclass="px-4 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600"
+                                                        label="Làm mới"/>
+                                                <button id="btnSaveTaskForm"
+                                                        sclass="px-4 py-1 bg-green-500 text-white rounded hover:bg-green-600"
+                                                        label="Lưu công việc"/>
+                                                <button id="btnCancel"
+                                                        sclass="px-4 py-1 bg-red-500 text-white rounded hover:bg-red-600"
+                                                        label="Hủy"/>
+                                            </div>
+                                        </cell>
+                                    </row>
+                                </rows>
+                            </grid>
+                        </div>
+
+                        <!-- H1 C2: Thông tin hợp đồng -->
+                        <div height="100%" width="100%">
+                            <label value="Thông tin giao việc " style="margin-bottom:5px;"/>
+                            <grid width="100%" sclass="compact-grid">
+                                <columns>
+                                    <column width="25%"/>
+                                    <column width="30%"/>
+                                    <column width="20%"/>
+                                    <column width="30%"/>
+                                </columns>
+                                <rows>
+                                    <row>
+                                        <label value="Người giao việc"/>
+                                        <combobox width="100%">
+                                            <comboitem label="---Tất cả---"/>
+                                        </combobox>
+                                        <label value="Nhân viên"/>
+                                        <combobox width="100%">
+                                            <comboitem label="---Tất cả---"/>
+                                        </combobox>
+                                    </row>
+                                    <row>
+                                        <label value="Phòng ban"/>
+                                        <combobox width="100%">
+                                            <comboitem label="---Tất cả---"/>
+                                            <comboitem label="Sale"/>
+                                        </combobox>
+                                        <label value="Ngày giao "/>
+                                        <datebox width="100%"/>
+                                    </row>
+                                    <row>
+                                        <label value="Từ ngày"/>
+                                        <datebox width="100%"/>
+                                        <label value="Đến ngày "/>
+                                        <datebox width="100%"/>
+                                    </row>
+                                    <row>
+                                        <label value="Từ ngày"/>
+                                        <datebox width="100%"/>
+                                        <label value="Đến ngày "/>
+                                        <datebox width="100%"/>
+                                    </row>
+                                    <row>
+                                        <label value="Mô tả"/>
+                                        <cell colspan="3">
+                                            <textbox multiline="true" rows="2" width="100%"/>
+                                        </cell>
+                                    </row>
+                                    <row>
+                                        <label value="Trạng thái(*)" style="color:red;"/>
+                                        <cell colspan="3">
+                                            <combobox id="cbCreatorAssign" width="100%">
+                                                <comboitem label="---Tất cả---"/>
+                                            </combobox>
+                                        </cell>
+
+                                    </row>
+                                    <row>
+                                        <cell colspan="4" style="text-align:center;">
+                                            <div sclass="flex justify-center gap-4 mt-2">
+                                                <button id="btnRefreshFormAssign"
+                                                        sclass="px-4 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600"
+                                                        label="Làm mới"/>
+                                                <button id="btnSaveFormAssign"
+                                                        sclass="px-4 py-1 bg-green-500 text-white rounded hover:bg-green-600"
+                                                        label="Lưu"/>
+                                                <button id="btnCancelAssign"
+                                                        sclass="px-4 py-1 bg-red-500 text-white rounded hover:bg-red-600"
+                                                        label="Hủy"/>
+                                            </div>
+                                        </cell>
+                                    </row>
+                                </rows>
+                            </grid>
+                        </div>
+                    </row>
+
+                    <!-- Hàng 2 -->
+                    <row>
+                        <div width="100%">
+                            <label value="Danh sách công việc"/>
+                            <listbox sclass="custom-list" width="100%">
+                                <listhead>
+                                    <listheader style="color:#767676;" label="STT" width="50px"/>
+                                    <listheader style="color:#767676;" sclass="text-start" label="Loại "/>
+                                    <listheader style="color:#767676;" sclass="text-start" label="Hợp đồng"/>
+                                    <listheader style="color:#767676;" sclass="text-start" label="Từ ngày"/>
+                                    <listheader style="color:#767676;" sclass="text-start" label="Đến ngày"/>
+                                    <listheader style="color:#767676;" sclass="text-start" label="Trạng thái"/>
+                                    <listheader style="color:#767676;" sclass="text-start" label="Người tạo"/>
+                                </listhead>
+                            </listbox>
+                        </div>
+                        <div width="100%">
+                            <label value="Danh sách giao việc"/>
+                            <listbox sclass="custom-list" width="100%">
+                                <listhead>
+                                    <listheader style="color:#767676;" label="STT" width="50px"/>
+                                    <listheader style="color:#767676;" sclass="text-start" label="Người giao "/>
+                                    <listheader style="color:#767676;" sclass="text-start" label="Nhân viên nhận"/>
+                                    <listheader style="color:#767676;" sclass="text-start" label="Phòng ban"/>
+                                    <listheader style="color:#767676;" sclass="text-start" label="Ngày giao"/>
+                                    <listheader style="color:#767676;" sclass="text-start" label="Đến ngày"/>
+                                    <listheader style="color:#767676;" sclass="text-start" label="Trạng thái"/>
+                                </listhead>
+                            </listbox>
+                        </div>
+                    </row>
+                </rows>
+            </grid>
+        </div>
+
+
+    </div>
+</zk>

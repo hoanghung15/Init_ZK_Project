@@ -1,17 +1,39 @@
 npx tailwindcss -i ./src/main/webapp/css/input.css -o ./src/main/webapp/css/tailwind.css --watch
 
+CREATE TABLE task (
+    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    type VARCHAR(255) NOT NULL,
+    department VARCHAR(255) NOT NULL,
+    description VARCHAR(255) NOT NULL,
+
+    startDate DATE NOT NULL,
+    endDate DATE NOT NULL,
+    updatedAt DATETIME NOT NULL,
+    status VARCHAR(255) NOT NULL,
+
+    creatBy_id INT,
+    staff_id INT,
+    contract_id INT,
+
+    CONSTRAINT fk_task_user FOREIGN KEY (creatBy_id) REFERENCES user(id),
+    CONSTRAINT fk_task_staff FOREIGN KEY (staff_id) REFERENCES staff(id),
+    CONSTRAINT fk_task_contract FOREIGN KEY (contract_id) REFERENCES contract(id)
+);
+
+
 CREATE TABLE staff (
     id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(100) NOT NULL,
+    department VARCHAR(100) NOT NULL,
     role VARCHAR(50) NOT NULL
 );
 
 INSERT INTO staff (name, role) VALUES
 ('Nguyễn Văn A', 'Trưởng phòng'),
-('Trần Thị B', 'Nhân viên kinh doanh'),
-('Lê Văn C', 'Nhân viên kinh doanh'),
+('Trần Thị B', 'Nhân viên'),
+('Lê Văn C', 'Nhân viên'),
 ('Phạm Thị D', 'Trưởng phòng'),
-('Hoàng Văn E', 'Nhân viên kinh doanh');
+('Hoàng Văn E', 'Nhân viên');
 
 CREATE TABLE contract (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -23,6 +45,7 @@ CREATE TABLE contract (
     phone_b VARCHAR(20),
     staff_id INT NOT NULL,
     file_data VARCHAR(255),
+    employee_id INT,
 
     contract_type VARCHAR(50) NOT NULL,
     contract_scope VARCHAR(50) NOT NULL,

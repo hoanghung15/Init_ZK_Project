@@ -2,7 +2,7 @@ package org.example.testdemozul.Enum;
 
 public enum StaffRoleEnum {
     MANAGER("Trưởng phòng"),
-    SALES_STAFF("Nhân viên kinh doanh");
+    SALES_STAFF("Nhân viên");
 
     private final String displayName;
 

@@ -57,13 +57,13 @@ public class ContractController extends SelectorComposer<Component> {
         System.out.println(totalContractInternal);
         int contractPending = totalContractInternal - contractDone;
         int contractDoneByManager = contractDAO.getAllContractWithFilter(null,"DONE", "Trưởng phòng", "Nội bộ",null).size() ;
-        int contractDoneByStaff = contractDAO.getAllContractWithFilter(null,"DONE", "Nhân viên kinh doanh", "Nội bộ",null).size() ;
+        int contractDoneByStaff = contractDAO.getAllContractWithFilter(null,"DONE", "Nhân viên", "Nội bộ",null).size() ;
 
         int contractExDone = contractDAO.getAllContractWithFilter(null,"DONE", null, "Đối tác ngoài",null).size() ;
         int totalContractEx = contractDAO.getAllContractWithFilter(null,null, null, "Đối tác ngoài",null).size() ;
         int contractExPending = totalContractEx - contractExDone;
         int contractExDoneByManager = contractDAO.getAllContractWithFilter(null,"DONE", "Trưởng phòng", "Đối tác ngoài",null).size() ;
-        int contractExDoneByStaff =  contractDAO.getAllContractWithFilter(null,"DONE", "Nhân viên kinh doanh", "Đối tác ngoài",null).size() ;
+        int contractExDoneByStaff =  contractDAO.getAllContractWithFilter(null,"DONE", "Nhân viên", "Đối tác ngoài",null).size() ;
 
         txtContractDoneByStaff.setValue(String.valueOf(contractDoneByStaff));
         txtContractDoneByManager.setValue(String.valueOf(contractDoneByManager));
