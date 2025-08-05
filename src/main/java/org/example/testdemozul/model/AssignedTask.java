@@ -69,4 +69,16 @@ public class AssignedTask {
     public void setAssignDate(Date assignDate) {
         this.assignDate = assignDate;
     }
+
+    @Override
+    public String toString() {
+        return "AssignedTask{" +
+                "id=" + id +
+                ", staff_id=" + staff_id +
+                ", user_id=" + user_id +
+                ", task_id=" + task_id +
+                ", description='" + description + '\'' +
+                ", assignDate=" + assignDate +
+                '}';
+    }
 }

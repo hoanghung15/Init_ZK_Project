@@ -13,7 +13,7 @@ public class CookieService {
             for (Cookie cookie : rq.getCookies()) {
                 if ("access_token".equals(cookie.getName())) {
                     token = cookie.getValue();
-                    System.out.println("this is token: " + token);
+//                    System.out.println("this is token: " + token);
                     break;
                 }
             }

@@ -20,13 +20,14 @@ import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.*;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class AssignTaskController extends SelectorComposer<Component> {
 
     // UI components
     @Wire
-    private Listbox taskListBox;
+    private Listbox taskListBox, lbAssignTask;
 
     @Wire
     public Combobox cbStaffInfo, cbTypeContract, cbTypeTask, cbTypeDepartment,
@@ -40,7 +41,7 @@ public class AssignTaskController extends SelectorComposer<Component> {
     public Button btnSaveTaskForm, btnDeleteTask, btnRefreshForm, btnSaveFormAssign;
 
     @Wire
-    public Textbox txtDescriptionTask;
+    public Textbox txtDescriptionTask, tbDescriptionAssign;
 
     // DAO & Service
     private final StaffDAO staffDAO = new StaffDAO();
@@ -53,6 +54,7 @@ public class AssignTaskController extends SelectorComposer<Component> {
     private List<Staff> staffList;
     private List<Task> taskList;
     private List<Task> unAssignedTaskList;
+    private List<AssignedTask> assignedTaskList;
 
     private Integer tmpTaskId = null;
 
@@ -63,8 +65,9 @@ public class AssignTaskController extends SelectorComposer<Component> {
 
         // Load initial data
         staffList = staffDAO.getAllStaff();
-        taskList = assignTaskDAO.getAllAssignTaskWithFilter(null);
-        unAssignedTaskList = assignTaskDAO.getAllAssignTaskWithFilter(null);
+        taskList = assignTaskDAO.getAllTaskWithFilter(null);
+        unAssignedTaskList = assignTaskDAO.getAllTaskWithFilter(null);
+        assignedTaskList = assignTaskDAO.getAllAssigned();
 
         applyComboBoxStaff();
         applyAssigneeTask();
@@ -74,6 +77,7 @@ public class AssignTaskController extends SelectorComposer<Component> {
 
         // renderListTask
         applyListTask();
+        applyAssign();
 
         // Button lưu
         btnSaveTaskForm.addEventListener(Events.ON_CLICK, event -> {
@@ -114,13 +118,13 @@ public class AssignTaskController extends SelectorComposer<Component> {
 
             switch (value) {
                 case "assigned":
-                    taskList = assignTaskDAO.getAllAssignTaskWithFilter(1);     // staff_id > 0
+                    taskList = assignTaskDAO.getAllTaskWithFilter(1);     // staff_id > 0
                     break;
                 case "unassigned":
-                    taskList = assignTaskDAO.getAllAssignTaskWithFilter(-1);    // staff_id = 0
+                    taskList = assignTaskDAO.getAllTaskWithFilter(-1);    // staff_id = 0
                     break;
                 default:
-                    taskList = assignTaskDAO.getAllAssignTaskWithFilter(null);  // tất cả
+                    taskList = assignTaskDAO.getAllTaskWithFilter(null);  // tất cả
                     break;
             }
 
@@ -164,7 +168,9 @@ public class AssignTaskController extends SelectorComposer<Component> {
         });
 
         btnSaveFormAssign.addEventListener(Events.ON_CLICK, event -> {
-            Messagebox.show("Test button");
+            createAssignTask();
+            Messagebox.show("Tạo giao việc mới thành công !");
+            Executions.sendRedirect(null);
         });
     }
 
@@ -289,7 +295,7 @@ public class AssignTaskController extends SelectorComposer<Component> {
         }
 
         System.out.println("Test " + task.toString());
-        assignTaskDAO.updateAssignTask(task);
+        assignTaskDAO.updateTask(task);
     }
 
     /*** Lấy thông tin user đang login*/
@@ -328,9 +334,30 @@ public class AssignTaskController extends SelectorComposer<Component> {
         });
     }
 
+    /** Hien thi danh sach assign*/
+    public void applyAssign(){
+        ListModelList<AssignedTask> model = new ListModelList<>(assignedTaskList);
+        lbAssignTask.setModel(model);
+        lbAssignTask.setItemRenderer((Listitem item, AssignedTask task, int index) -> {
+            item.setValue(task);
+            Task tmpTask = assignTaskDAO.getTaskInfoById(task.getTask_id());
+            Staff staff = staffDAO.getStaffById(task.getStaff_id());
+            new Listcell(String.valueOf(index + 1)).setParent(item);
+            new Listcell(String.valueOf(task.getUser_id())).setParent(item);
+            new Listcell(staff.getName()).setParent(item);
+            new Listcell(String.valueOf(task.getTask_id())).setParent(item);
+            new Listcell(staff.getDepartment()).setParent(item);
+
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            new Listcell(task.getAssignDate() != null ? sdf.format(task.getAssignDate()) : "").setParent(item);
+            new Listcell(tmpTask.getEndDate() != null ? sdf.format(tmpTask.getEndDate()) : "").setParent(item);
+
+        });
+    }
+
     /*** fill form data khi click vào task*/
     public void fillForm(Task task) {
-        clearForm();
+        clearFormTask();
 
         Staff staff = staffDAO.getStaffById(task.getStaff_id());
         Contract contract = contractDAO.getContractById(task.getContract_id());
@@ -363,7 +390,7 @@ public class AssignTaskController extends SelectorComposer<Component> {
     }
 
     /*** clear form data*/
-    public void clearForm() {
+    public void clearFormTask() {
         // Xóa các Textbox và Datebox
         txtDescriptionTask.setValue("");
         startDateTask.setValue(null);
@@ -385,6 +412,22 @@ public class AssignTaskController extends SelectorComposer<Component> {
 
     public void createAssignTask() {
         AssignedTask assignedTask = new AssignedTask();
+        if(cbStaffTaskAssigned.getValue() == null){
+            Messagebox.show("Loi roi");
+        }
+        assignedTask.setStaff_id(cbStaffTaskAssigned.getSelectedItem().getValue());
+        assignedTask.setTask_id(cbIdTaskUnassign.getSelectedItem().getValue());
+        assignedTask.setUser_id(getUserLogin().getId());
+        if(dbAssignDate.getValue() == null){
+            Messagebox.show("Vui lòng chọn ngày giao việc");
+        }
+        else{
+            assignedTask.setAssignDate(dbAssignDate.getValue());
+        }
+        assignedTask.setDescription(tbDescriptionAssign.getValue());
+
+        assignTaskDAO.createNewAssign(assignedTask);
+        System.out.println(assignedTask.toString());
 
     }
 

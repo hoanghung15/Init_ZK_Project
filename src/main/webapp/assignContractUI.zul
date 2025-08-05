@@ -126,7 +126,7 @@
                                         </combobox>
                                         <label value="Nhân viên"/>
                                         <combobox id="cbStaffTaskAssigned" width="100%">
-                                            <comboitem label="---Tất cả---"/>
+                                            <comboitem  value="" label="---Tất cả---"/>
                                         </combobox>
                                     </row>
                                     <row>
@@ -162,7 +162,6 @@
                                         <label value="Mã Công việc(*)" style="color:red;"/>
                                         <cell colspan="3">
                                             <combobox id="cbIdTaskUnassign" width="100%">
-                                                <comboitem label="Lựa chọn công việc"/>
                                             </combobox>
                                         </cell>
 
@@ -210,15 +209,16 @@
                         </div>
                         <div width="100%">
                             <label value="Danh sách giao việc"/>
-                            <listbox sclass="custom-list" width="100%">
+                            <listbox id="lbAssignTask" sclass="custom-list" width="100%">
                                 <listhead>
-                                    <listheader style="color:#767676;" label="STT" width="50px"/>
-                                    <listheader style="color:#767676;" sclass="text-start" label="Người giao "/>
-                                    <listheader style="color:#767676;" sclass="text-start" label="Nhân viên nhận"/>
+                                    <listheader style="color:#767676;" label="STT"  sclass="text-start"  width="50px"/>
+                                    <listheader style="color:#767676;" sclass="text-start" width="100px" label="Người giao "/>
+                                    <listheader style="color:#767676;" sclass="text-start" label="Nhân viên"/>
+                                    <listheader style="color:#767676;" sclass="text-start" label="Mã CV"/>
                                     <listheader style="color:#767676;" sclass="text-start" label="Phòng ban"/>
                                     <listheader style="color:#767676;" sclass="text-start" label="Ngày giao"/>
                                     <listheader style="color:#767676;" sclass="text-start" label="Đến ngày"/>
-                                    <listheader style="color:#767676;" sclass="text-start" label="Trạng thái"/>
+
                                 </listhead>
                             </listbox>
                         </div>
