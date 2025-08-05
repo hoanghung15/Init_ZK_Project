@@ -65,7 +65,7 @@
                                     </row>
 
                                     <row>
-                                        <label value="Mô tả"/>
+                                        <label value="Mô tả cv"/>
                                         <cell colspan="3">
                                             <textbox id="txtDescriptionTask" multiline="true" rows="2" width="100%"/>
                                         </cell>
@@ -98,9 +98,9 @@
                                                 <button id="btnSaveTaskForm"
                                                         sclass="px-4 py-1 bg-green-500 text-white rounded hover:bg-green-600"
                                                         label="Lưu công việc"/>
-                                                <button id="btnCancel"
+                                                <button id="btnDeleteTask"
                                                         sclass="px-4 py-1 bg-red-500 text-white rounded hover:bg-red-600"
-                                                        label="Hủy"/>
+                                                        label="Xóa"/>
                                             </div>
                                         </cell>
                                     </row>
@@ -125,35 +125,37 @@
                                             <comboitem label="---Tất cả---"/>
                                         </combobox>
                                         <label value="Nhân viên"/>
-                                        <combobox width="100%">
+                                        <combobox id="cbStaffTaskAssigned" width="100%">
                                             <comboitem label="---Tất cả---"/>
                                         </combobox>
                                     </row>
                                     <row>
                                         <label value="Phòng ban"/>
-                                        <combobox width="100%">
-                                            <comboitem label="---Tất cả---"/>
-                                            <comboitem label="Sale"/>
+                                        <combobox id="cbDepartmentAssigned" width="100%">
+                                            <comboitem value="" label="---Tất cả---"/>
+                                            <comboitem value="SALE" label="SALE"/>
+                                            <comboitem value="CSVC" label="CSVC"/>
+                                            <comboitem value="DIGITAL" label="DIGITAL"/>
                                         </combobox>
                                         <label value="Ngày giao "/>
-                                        <datebox width="100%"/>
+                                        <datebox id="dbAssignDate" width="100%"/>
                                     </row>
                                     <row>
                                         <label value="Từ ngày"/>
-                                        <datebox width="100%"/>
+                                        <datebox id="dbStartDateTask" width="100%"/>
                                         <label value="Đến ngày "/>
-                                        <datebox width="100%"/>
+                                        <datebox id="dbEndDateTask" width="100%"/>
                                     </row>
                                     <row>
-                                        <label value="Từ ngày"/>
-                                        <datebox width="100%"/>
-                                        <label value="Đến ngày "/>
-                                        <datebox width="100%"/>
+                                        <label value=""/>
+
+                                        <label value=""/>
+
                                     </row>
                                     <row>
-                                        <label value="Mô tả"/>
+                                        <label value="Mô tả giao việc"/>
                                         <cell colspan="3">
-                                            <textbox multiline="true" rows="2" width="100%"/>
+                                            <textbox id="tbDescriptionAssign" multiline="true" rows="2" width="100%"/>
                                         </cell>
                                     </row>
                                     <row>
@@ -168,15 +170,12 @@
                                     <row>
                                         <cell colspan="4" style="text-align:center;">
                                             <div sclass="flex justify-center gap-4 mt-2">
-                                                <button id="btnRefreshFormAssign"
-                                                        sclass="px-4 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600"
-                                                        label="Làm mới"/>
                                                 <button id="btnSaveFormAssign"
                                                         sclass="px-4 py-1 bg-green-500 text-white rounded hover:bg-green-600"
                                                         label="Lưu"/>
                                                 <button id="btnCancelAssign"
                                                         sclass="px-4 py-1 bg-red-500 text-white rounded hover:bg-red-600"
-                                                        label="Hủy"/>
+                                                        label="Xóa giao việc"/>
                                             </div>
                                         </cell>
                                     </row>

@@ -13,7 +13,7 @@ import java.util.List;
 public class AssignTaskDAO {
 
     /** Thêm task mới vào DB */
-    public void creatNewAssignTask(Task task) {
+    public void creatNewTask(Task task) {
         String sql = "INSERT INTO task (type, department, description, startDate, endDate, updatedAt, status, creatBy_id, staff_id, contract_id) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
@@ -120,10 +120,53 @@ public class AssignTaskDAO {
         return tasks;
     }
 
+    /**Delete task*/
+    public void deleteTask(Integer id) {
+        String sql = "DELETE FROM task WHERE id = ?";
+        try(Connection conn = DBConnection.getConnection();
+        PreparedStatement preparedStatement = conn.prepareStatement(sql)){
+            preparedStatement.setInt(1, id);
+            int rows = preparedStatement.executeUpdate();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /** Get task by ID*/
+    public Task getTaskInfoById(Integer id) {
+        Task task = new Task();
+        String sql = "SELECT * FROM task WHERE id = ?";
+        try(Connection connection = DBConnection.getConnection();
+        PreparedStatement statement = connection.prepareStatement(sql)){
+            statement.setInt(1, id);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                task.setId(rs.getInt("id"));
+                task.setContract_id(rs.getInt("contract_id"));
+                task.setType(rs.getString("type"));
+                task.setDepartment(rs.getString("department"));
+                task.setDescription(rs.getString("description"));
+
+                // Lấy DATE và DATETIME từ DB
+                task.setStartDate(rs.getDate("startDate"));
+                task.setEndDate(rs.getDate("endDate"));
+                task.setUpdateAt(rs.getTimestamp("updatedAt"));
+
+                task.setStatus(rs.getString("status"));
+                task.setCreatBy_id(rs.getInt("creatBy_id"));
+                task.setStaff_id(rs.getInt("staff_id"));
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return  task;
+    }
+
     public static void main(String[] args) {
         AssignTaskDAO assignTaskDAO = new AssignTaskDAO();
-        for (Task task : assignTaskDAO.getAllAssignTaskWithFilter(1)) {
-            System.out.println(task.toString());
-        }
+        System.out.println(assignTaskDAO.getTaskInfoById(9).toString());
     }
 }

@@ -1,5 +1,17 @@
 npx tailwindcss -i ./src/main/webapp/css/input.css -o ./src/main/webapp/css/tailwind.css --watch
 
+create table assign_task(
+    id int auto_increment not null primary key,
+    staff_id int not null ,
+    task_id int not null ,
+    user_id int not null,
+    assign_date date not null ,
+    description varchar(255) not null ,
+    foreign key (task_id) references task(id),
+    foreign key (staff_id) references staff(id),
+    foreign key (user_id) references user(id)
+)
+
 CREATE TABLE task (
     id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     type VARCHAR(255) NOT NULL,
