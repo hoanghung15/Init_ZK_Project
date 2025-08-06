@@ -67,7 +67,7 @@ public class StaffDAO {
 
     public static void main(String[] args) {
         StaffDAO staffDAO = new StaffDAO();
-        System.out.println(staffDAO.getAllStaffByDepartment("DIGITAL").size());
+        System.out.println(staffDAO.getStaffById(2).toString());
     }
 
 }

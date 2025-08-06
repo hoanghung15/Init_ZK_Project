@@ -212,9 +212,9 @@
                             <listbox id="lbAssignTask" sclass="custom-list" width="100%">
                                 <listhead>
                                     <listheader style="color:#767676;" label="STT"  sclass="text-start"  width="50px"/>
-                                    <listheader style="color:#767676;" sclass="text-start" width="100px" label="Người giao "/>
-                                    <listheader style="color:#767676;" sclass="text-start" label="Nhân viên"/>
-                                    <listheader style="color:#767676;" sclass="text-start" label="Mã CV"/>
+                                    <listheader style="color:#767676;" sclass="text-start" width="125px" label="Người giao "/>
+                                    <listheader style="color:#767676;" sclass="text-start"  width="130px" label="Nhân viên"/>
+                                    <listheader style="color:#767676;" sclass="text-start" width="70px"  label="Mã CV"/>
                                     <listheader style="color:#767676;" sclass="text-start" label="Phòng ban"/>
                                     <listheader style="color:#767676;" sclass="text-start" label="Ngày giao"/>
                                     <listheader style="color:#767676;" sclass="text-start" label="Đến ngày"/>

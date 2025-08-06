@@ -38,7 +38,7 @@ public class AssignTaskController extends SelectorComposer<Component> {
     public Datebox startDateTask, endDateTask, createdDateTask, dbStartDateTask, dbEndDateTask, dbAssignDate;
 
     @Wire
-    public Button btnSaveTaskForm, btnDeleteTask, btnRefreshForm, btnSaveFormAssign;
+    public Button btnSaveTaskForm, btnDeleteTask, btnRefreshForm, btnSaveFormAssign, btnCancelAssign;
 
     @Wire
     public Textbox txtDescriptionTask, tbDescriptionAssign;
@@ -57,6 +57,7 @@ public class AssignTaskController extends SelectorComposer<Component> {
     private List<AssignedTask> assignedTaskList;
 
     private Integer tmpTaskId = null;
+    private Integer tmpAssignId = null;
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
@@ -132,6 +133,7 @@ public class AssignTaskController extends SelectorComposer<Component> {
 
         });
 
+        //event click row list  task
         taskListBox.addEventListener(Events.ON_SELECT, event -> {
             if (taskListBox.getSelectedItem() != null) {
                 Task task = taskListBox.getSelectedItem().getValue();
@@ -139,6 +141,16 @@ public class AssignTaskController extends SelectorComposer<Component> {
                 fillForm(task);
             }
 
+        });
+
+        //event click row list assign
+        lbAssignTask.addEventListener(Events.ON_SELECT, event -> {
+            if (lbAssignTask.getSelectedItem() != null) {
+                AssignedTask assignedTask = lbAssignTask.getSelectedItem().getValue();
+                tmpAssignId = assignedTask.getId();
+                System.out.println(tmpAssignId);
+                fillAssignInfo(assignedTask);
+            }
         });
 
         btnDeleteTask.addEventListener(Events.ON_CLICK, event -> {
@@ -168,9 +180,33 @@ public class AssignTaskController extends SelectorComposer<Component> {
         });
 
         btnSaveFormAssign.addEventListener(Events.ON_CLICK, event -> {
-            createAssignTask();
-            Messagebox.show("Tạo giao việc mới thành công !");
-            Executions.sendRedirect(null);
+            if (tmpAssignId == null) {
+                createAssignTask();
+                Messagebox.show("Tạo giao việc mới thành công !");
+                Executions.sendRedirect(null);
+            } else {
+                Messagebox.show("Dang update");
+            }
+        });
+
+        btnCancelAssign.addEventListener(Events.ON_CLICK, event -> {
+            if (tmpAssignId == null) {
+                Messagebox.show("Vui lòng chọn mã giao việc");
+            } else {
+                Messagebox.show(
+                        "Bạn có chắc chắn muốn xóa giao việc này?",
+                        "Xác nhận xóa",
+                        new Messagebox.Button[]{Messagebox.Button.OK, Messagebox.Button.CANCEL},
+                        Messagebox.EXCLAMATION,
+                        evt -> {
+                            if (Messagebox.ON_OK.equals(evt.getName())) {
+                                assignTaskDAO.deleteAssign(tmpAssignId);
+                                Executions.sendRedirect(null);
+                            }
+                        }
+                );
+            }
+
         });
     }
 
@@ -294,7 +330,6 @@ public class AssignTaskController extends SelectorComposer<Component> {
             task.setCreatBy_id(cbCreatorTask.getSelectedItem().getValue());
         }
 
-        System.out.println("Test " + task.toString());
         assignTaskDAO.updateTask(task);
     }
 
@@ -334,16 +369,19 @@ public class AssignTaskController extends SelectorComposer<Component> {
         });
     }
 
-    /** Hien thi danh sach assign*/
-    public void applyAssign(){
+    /**
+     * Hien thi danh sach assign
+     */
+    public void applyAssign() {
         ListModelList<AssignedTask> model = new ListModelList<>(assignedTaskList);
         lbAssignTask.setModel(model);
         lbAssignTask.setItemRenderer((Listitem item, AssignedTask task, int index) -> {
             item.setValue(task);
             Task tmpTask = assignTaskDAO.getTaskInfoById(task.getTask_id());
             Staff staff = staffDAO.getStaffById(task.getStaff_id());
+            User tmopUser = getUserLogin();
             new Listcell(String.valueOf(index + 1)).setParent(item);
-            new Listcell(String.valueOf(task.getUser_id())).setParent(item);
+            new Listcell(tmopUser.getUsername()).setParent(item);
             new Listcell(staff.getName()).setParent(item);
             new Listcell(String.valueOf(task.getTask_id())).setParent(item);
             new Listcell(staff.getDepartment()).setParent(item);
@@ -389,6 +427,22 @@ public class AssignTaskController extends SelectorComposer<Component> {
         }
     }
 
+    /**
+     * fill form assign khi click vào assign list
+     */
+    public void fillAssignInfo(AssignedTask assignedTask) {
+        Staff staff = staffDAO.getStaffById(assignedTask.getStaff_id());
+        Task task = assignTaskDAO.getTaskInfoById(assignedTask.getTask_id());
+        cbDepartmentAssigned.setValue(staff.getDepartment());
+        dbAssignDate.setValue(assignedTask.getAssignDate());
+        dbStartDateTask.setValue(task.getStartDate());
+        dbEndDateTask.setValue(task.getEndDate());
+        selectComboboxByValue(cbStaffTaskAssigned, assignedTask.getStaff_id());
+        selectComboboxByValue(cbIdTaskUnassign, assignedTask.getTask_id());
+        tbDescriptionAssign.setText(assignedTask.getDescription());
+
+    }
+
     /*** clear form data*/
     public void clearFormTask() {
         // Xóa các Textbox và Datebox
@@ -412,22 +466,21 @@ public class AssignTaskController extends SelectorComposer<Component> {
 
     public void createAssignTask() {
         AssignedTask assignedTask = new AssignedTask();
-        if(cbStaffTaskAssigned.getValue() == null){
+        if (cbStaffTaskAssigned.getValue() == null) {
             Messagebox.show("Loi roi");
         }
         assignedTask.setStaff_id(cbStaffTaskAssigned.getSelectedItem().getValue());
         assignedTask.setTask_id(cbIdTaskUnassign.getSelectedItem().getValue());
         assignedTask.setUser_id(getUserLogin().getId());
-        if(dbAssignDate.getValue() == null){
+        if (dbAssignDate.getValue() == null) {
             Messagebox.show("Vui lòng chọn ngày giao việc");
-        }
-        else{
+        } else {
             assignedTask.setAssignDate(dbAssignDate.getValue());
         }
         assignedTask.setDescription(tbDescriptionAssign.getValue());
 
         assignTaskDAO.createNewAssign(assignedTask);
-        System.out.println(assignedTask.toString());
+
 
     }
 

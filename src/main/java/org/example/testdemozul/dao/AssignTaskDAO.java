@@ -141,6 +141,21 @@ public class AssignTaskDAO {
         }
     }
 
+
+    /**
+     * delete assign
+     */
+    public void deleteAssign(Integer id) {
+        String sql = "DELETE FROM assign_task WHERE id = ?";
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            int rows = ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * Get task by ID
      */
@@ -219,8 +234,32 @@ public class AssignTaskDAO {
         return assignedTasks;
     }
 
+    /**
+     * Get assign info by id
+     */
+    public AssignedTask getAssignedById(Integer id) {
+        AssignedTask assignedTask = new AssignedTask();
+        String sql = "SELECT * FROM assign_task WHERE id = ?";
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                assignedTask.setId(rs.getInt("id"));
+                assignedTask.setStaff_id(rs.getInt("staff_id"));
+                assignedTask.setTask_id(rs.getInt("task_id"));
+                assignedTask.setUser_id(rs.getInt("user_id"));
+                assignedTask.setAssignDate(rs.getDate("assign_date"));
+                assignedTask.setDescription(rs.getString("description"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return assignedTask;
+    }
+
     public static void main(String[] args) {
         AssignTaskDAO assignTaskDAO = new AssignTaskDAO();
-        System.out.println(assignTaskDAO.getAllAssigned().size());
+        System.out.println(assignTaskDAO.getAssignedById(1).toString());
     }
 }
