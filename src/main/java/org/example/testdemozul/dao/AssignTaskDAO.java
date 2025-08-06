@@ -69,11 +69,28 @@ public class AssignTaskDAO {
             ps.setInt(8, task.getCreatBy_id());
             ps.setInt(9, task.getStaff_id());
             ps.setInt(10, task.getContract_id());
-            ps.setInt(11, task.getId()); // WHERE id = ?
+            ps.setInt(11, task.getId());
 
             int rows = ps.executeUpdate();
             System.out.println("Update rows: " + rows);
 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateAssign(AssignedTask assignedTask) {
+        String sql = "UPDATE assign_task SET staff_id = ?, task_id = ?, user_id = ?, assign_date = ?, description = ? " +
+                "WHERE id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, assignedTask.getStaff_id());
+            ps.setInt(2, assignedTask.getTask_id());
+            ps.setInt(3, assignedTask.getUser_id());
+            ps.setDate(4, new java.sql.Date(assignedTask.getAssignDate().getTime()));
+            ps.setString(5, assignedTask.getDescription());
+            ps.setInt(6, assignedTask.getId());
+            int rows = ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
         }

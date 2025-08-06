@@ -49,6 +49,7 @@ public class AssignTaskController extends SelectorComposer<Component> {
     private final AssignTaskDAO assignTaskDAO = new AssignTaskDAO();
     private final CookieService cookieService = new CookieService();
     private final JwtServiceImpl jwtService = new JwtServiceImpl();
+    private final UserDAO userDAO = new UserDAO();
 
     // Data
     private List<Staff> staffList;
@@ -185,7 +186,8 @@ public class AssignTaskController extends SelectorComposer<Component> {
                 Messagebox.show("Tạo giao việc mới thành công !");
                 Executions.sendRedirect(null);
             } else {
-                Messagebox.show("Dang update");
+                updateAssignTask();
+                Executions.sendRedirect(null);
             }
         });
 
@@ -333,6 +335,21 @@ public class AssignTaskController extends SelectorComposer<Component> {
         assignTaskDAO.updateTask(task);
     }
 
+    public void updateAssignTask(){
+        AssignedTask assignedTask = new AssignedTask();
+        User user = getUserLogin();
+
+        assignedTask.setId(tmpAssignId);
+        assignedTask.setStaff_id(cbStaffTaskAssigned.getSelectedItem().getValue());
+        assignedTask.setTask_id(cbIdTaskUnassign.getSelectedItem().getValue());
+        assignedTask.setUser_id(user.getId());
+        assignedTask.setDescription(tbDescriptionAssign.getValue());
+        assignedTask.setAssignDate(dbAssignDate.getValue());
+
+        assignTaskDAO.updateAssign(assignedTask);
+        System.out.println(assignedTask.toString());
+    }
+
     /*** Lấy thông tin user đang login*/
     public User getUserLogin() {
         String token = cookieService.getTokenFromCookie();
@@ -379,9 +396,10 @@ public class AssignTaskController extends SelectorComposer<Component> {
             item.setValue(task);
             Task tmpTask = assignTaskDAO.getTaskInfoById(task.getTask_id());
             Staff staff = staffDAO.getStaffById(task.getStaff_id());
-            User tmopUser = getUserLogin();
+
+            User user = userDAO.getUserById(task.getUser_id());
             new Listcell(String.valueOf(index + 1)).setParent(item);
-            new Listcell(tmopUser.getUsername()).setParent(item);
+            new Listcell(user.getUsername()).setParent(item);
             new Listcell(staff.getName()).setParent(item);
             new Listcell(String.valueOf(task.getTask_id())).setParent(item);
             new Listcell(staff.getDepartment()).setParent(item);

@@ -29,6 +29,24 @@ public class UserDAO {
         return users;
     }
 
+    public User getUserById(Integer id) {
+        User user = new User();
+        String sql = "select * from user where id = ?";
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ResultSet resultSet = ps.executeQuery();
+            if (resultSet.next()) {
+               user.setId(resultSet.getInt("id"));
+               user.setUsername(resultSet.getString("username"));
+               user.setPassword(resultSet.getString("password"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return user;
+    }
+
     public User getUser(String username) {
         String sql = "select * from user where username = ?";
         try (Connection connection = DBConnection.getConnection();

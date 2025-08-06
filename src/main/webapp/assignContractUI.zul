@@ -142,9 +142,9 @@
                                     </row>
                                     <row>
                                         <label value="Từ ngày"/>
-                                        <datebox id="dbStartDateTask" width="100%"/>
+                                        <datebox disabled="true" id="dbStartDateTask" width="100%"/>
                                         <label value="Đến ngày "/>
-                                        <datebox id="dbEndDateTask" width="100%"/>
+                                        <datebox disabled="true" id="dbEndDateTask" width="100%"/>
                                     </row>
                                     <row>
                                         <label value=""/>
