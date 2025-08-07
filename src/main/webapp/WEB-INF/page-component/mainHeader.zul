@@ -30,8 +30,8 @@
                    onClick='Executions.sendRedirect("/tax.zul")'/>
             <label value="Quản lý giao việc" sclass="cursor-pointer hover:underline   me-5 "
                    onClick='Executions.sendRedirect("/assignContractUI.zul")'/>
-            <label value="Quản lý biên bản hóa đơn" sclass="cursor-pointer hover:underline   me-5 "
-                   onClick='Executions.sendRedirect("/other.zul")'/>
+            <label value="Phê duyệt đối tác" sclass="cursor-pointer hover:underline   me-5 "
+                   onClick='Executions.sendRedirect("/partner.zul")'/>
             <label value="Báo cáo" sclass="cursor-pointer hover:underline   me-5 "
                    onClick='org.zkoss.zk.ui.Executions.sendRedirect("/other.zul")'/>
             <label value="Web portal" sclass="cursor-pointer hover:underline   me-5 "

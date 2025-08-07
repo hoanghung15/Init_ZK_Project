@@ -1,0 +1,102 @@
+create table partner
+(
+    id         int auto_increment
+        primary key,
+    partner_Id varchar(10)                    not null,
+    mst        varchar(20)                    not null,
+    name       varchar(100)                   not null,
+    address    varchar(250)                   not null,
+    status     varchar(250) default 'PENDING' null
+);
+
+create table staff
+(
+    id         int auto_increment
+        primary key,
+    name       varchar(100) not null,
+    role       varchar(50)  not null,
+    department varchar(100) not null
+);
+
+create table contract
+(
+    id              int auto_increment
+        primary key,
+    number_contract varchar(50)                   not null,
+    name            varchar(100)                  not null,
+    email_a         varchar(100)                  null,
+    email_b         varchar(100)                  null,
+    phone_a         varchar(20)                   null,
+    phone_b         varchar(20)                   null,
+    staff_id        int                           not null,
+    file_data       varchar(255)                  null,
+    employee_id     int                           null,
+    contract_type   varchar(50)                   not null,
+    contract_scope  varchar(50)                   not null,
+    start_date      date                          not null,
+    end_date        date                          not null,
+    payment_method  varchar(50)                   not null,
+    status          varchar(20) default 'PENDING' not null,
+    constraint fk_staff
+        foreign key (staff_id) references staff (id)
+);
+
+create table user
+(
+    id       int auto_increment
+        primary key,
+    username varchar(50)  not null,
+    password varchar(255) not null,
+    constraint username
+        unique (username)
+);
+
+create table task
+(
+    id          int auto_increment
+        primary key,
+    type        varchar(255) not null,
+    department  varchar(255) not null,
+    description varchar(255) not null,
+    startDate   date         not null,
+    endDate     date         not null,
+    updatedAt   datetime     not null,
+    status      varchar(255) not null,
+    creatBy_id  int          null,
+    staff_id    int          null,
+    contract_id int          null,
+    constraint fk_task_contract
+        foreign key (contract_id) references contract (id)
+            on delete cascade,
+    constraint fk_task_user
+        foreign key (creatBy_id) references user (id)
+);
+
+create table assign_task
+(
+    id          int auto_increment
+        primary key,
+    staff_id    int                               not null,
+    task_id     int                               not null,
+    user_id     int                               not null,
+    assign_date date                              not null,
+    description varchar(255)                      not null,
+    status      varchar(255) default 'IN PROCESS' not null,
+    constraint assign_task_ibfk_1
+        foreign key (task_id) references task (id)
+            on delete cascade,
+    constraint assign_task_ibfk_2
+        foreign key (staff_id) references staff (id),
+    constraint assign_task_ibfk_3
+        foreign key (user_id) references user (id)
+);
+
+create index staff_id
+    on assign_task (staff_id);
+
+create index user_id
+    on assign_task (user_id);
+
+create index fk_task_staff
+    on task (staff_id);
+

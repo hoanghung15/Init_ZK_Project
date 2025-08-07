@@ -28,15 +28,15 @@
                                 <rows>
                                     <row>
                                         <label style=" ;" value="Dịch vụ (*)"/>
-                                        <combobox width="100%" id="cbTypeService" placeholder="Chọn đối tác"></combobox>
+                                        <combobox width="100%" id="cbTypeService"  ></combobox>
                                     </row>
                                     <row>
                                         <label style=" ;" value="Đối tác (*)"/>
-                                        <combobox width="100%" id="cbPartner" placeholder="Chọn đối tác"></combobox>
+                                        <combobox width="100%" id="cbPartner"  ></combobox>
                                     </row>
                                     <row>
                                         <label style=" ;" value="Hợp đồng (*)"/>
-                                        <combobox width="100%" id="cbContract" placeholder="Chọn đối tác"></combobox>
+                                        <combobox width="100%" id="cbContract"  ></combobox>
                                     </row>
                                 </rows>
                             </grid>
@@ -59,14 +59,44 @@
                                     </row>
                                     <row>
                                         <label style=" ;" value="Loại thuế (*)"/>
-                                        <combobox width="100%"  placeholder="Chọn đối tác"></combobox>
+                                        <combobox width="100%"   ></combobox>
                                     </row>
                                 </rows>
                             </grid>
                         </div>
                     </row>
+                    <row> <cell colspan="2">
+                        <div sclass="flex justify-center gap-4 mt-2">
+                            <button
+                                    sclass=" py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600"
+                                    label="Làm mới"/>
+                            <button
+                                    sclass="px-4 py-1 bg-green-500 text-white rounded hover:bg-green-600"
+                                    label="Khai báo thuế suất"/>
+                            <button  sclass="px-4 py-1 bg-red-500 text-white rounded hover:bg-red-600"
+                                    label="Hủy"/>
+                        </div>
+                    </cell></row>
                 </rows>
             </grid>
+        </div>
+
+        <div width="100% mt-4">
+            <label value="Danh sách hợp đồng / thuế suất"/>
+        </div>
+        <div width="100%">
+            <listbox  sclass="custom-list" width="100%">
+                <listhead>
+                    <listheader style="color:#767676;" label="STT" width="50px"/>
+                    <listheader style="color:#767676;" sclass="text-start" label="Dịch vụ"/>
+                    <listheader style="color:#767676;" sclass="text-start" label="Hợp đồng"/>
+                    <listheader style="color:#767676;" sclass="text-start" label="Đối tác"/>
+                    <listheader style="color:#767676;" sclass="text-start" label="Loại thuế"/>
+                    <listheader style="color:#767676;" sclass="text-start" label="Thuế suất "/>
+                    <listheader style="color:#767676;" sclass="text-start" label="Công thức thuế "/>
+                    <listheader style="color:#767676;" sclass="text-start" label="Từ ngày "/>
+                    <listheader style="color:#767676;" sclass="text-start" label="Đến ngày "/> </listhead>
+            </listbox>
         </div>
     </div>
 </zk>
