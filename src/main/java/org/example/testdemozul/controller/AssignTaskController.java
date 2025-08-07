@@ -32,7 +32,7 @@ public class AssignTaskController extends SelectorComposer<Component> {
     @Wire
     public Combobox cbStaffInfo, cbTypeContract, cbTypeTask, cbTypeDepartment,
             cbStatusTask, cbCreatorTask, cbAssignee, cbFilterStaff, cbIdTaskUnassign,
-            cbStaffTaskAssigned, cbDepartmentAssigned;
+            cbStaffTaskAssigned, cbDepartmentAssigned, cbStatusAssign;
 
     @Wire
     public Datebox startDateTask, endDateTask, createdDateTask, dbStartDateTask, dbEndDateTask, dbAssignDate;
@@ -294,7 +294,8 @@ public class AssignTaskController extends SelectorComposer<Component> {
         task.setEndDate(endDateTask.getValue());
         task.setDescription(txtDescriptionTask.getValue());
         task.setStatus(cbStatusTask.getValue());
-        task.setUpdateAt(createdDateTask.getValue()); // java.util.Date
+        task.setUpdateAt(createdDateTask.getValue());
+        // java.util.Date
 
         // Lấy giá trị từ combobox
         if (cbStaffInfo.getSelectedItem() != null) {
@@ -335,7 +336,7 @@ public class AssignTaskController extends SelectorComposer<Component> {
         assignTaskDAO.updateTask(task);
     }
 
-    public void updateAssignTask(){
+    public void updateAssignTask() {
         AssignedTask assignedTask = new AssignedTask();
         User user = getUserLogin();
 
@@ -345,6 +346,7 @@ public class AssignTaskController extends SelectorComposer<Component> {
         assignedTask.setUser_id(user.getId());
         assignedTask.setDescription(tbDescriptionAssign.getValue());
         assignedTask.setAssignDate(dbAssignDate.getValue());
+        assignedTask.setStatus(cbStatusAssign.getSelectedItem().getValue());
 
         assignTaskDAO.updateAssign(assignedTask);
         System.out.println(assignedTask.toString());
@@ -457,6 +459,7 @@ public class AssignTaskController extends SelectorComposer<Component> {
         dbEndDateTask.setValue(task.getEndDate());
         selectComboboxByValue(cbStaffTaskAssigned, assignedTask.getStaff_id());
         selectComboboxByValue(cbIdTaskUnassign, assignedTask.getTask_id());
+        selectComboboxByValue(cbStatusAssign, assignedTask.getStatus());
         tbDescriptionAssign.setText(assignedTask.getDescription());
 
     }
@@ -496,6 +499,7 @@ public class AssignTaskController extends SelectorComposer<Component> {
             assignedTask.setAssignDate(dbAssignDate.getValue());
         }
         assignedTask.setDescription(tbDescriptionAssign.getValue());
+        assignedTask.setStatus(cbStatusAssign.getSelectedItem().getValue());
 
         assignTaskDAO.createNewAssign(assignedTask);
 

@@ -9,17 +9,27 @@ public class AssignedTask {
     int task_id;
     String description;
     Date assignDate;
+    String status;
 
     public AssignedTask() {
     }
 
-    public AssignedTask(int id, int staff_id, int user_id, int task_id, String description, Date assignDate) {
+    public AssignedTask(int id, int staff_id, int user_id, int task_id, String description, Date assignDate, String status) {
         this.id = id;
         this.staff_id = staff_id;
         this.user_id = user_id;
         this.task_id = task_id;
         this.description = description;
         this.assignDate = assignDate;
+        this.status = status;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public int getId() {
@@ -79,6 +89,7 @@ public class AssignedTask {
                 ", task_id=" + task_id +
                 ", description='" + description + '\'' +
                 ", assignDate=" + assignDate +
+                ", status='" + status + '\'' +
                 '}';
     }
 }

@@ -80,7 +80,7 @@ public class AssignTaskDAO {
     }
 
     public void updateAssign(AssignedTask assignedTask) {
-        String sql = "UPDATE assign_task SET staff_id = ?, task_id = ?, user_id = ?, assign_date = ?, description = ? " +
+        String sql = "UPDATE assign_task SET staff_id = ?, task_id = ?, user_id = ?, assign_date = ?, description = ?, status = ? " +
                 "WHERE id = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -89,7 +89,8 @@ public class AssignTaskDAO {
             ps.setInt(3, assignedTask.getUser_id());
             ps.setDate(4, new java.sql.Date(assignedTask.getAssignDate().getTime()));
             ps.setString(5, assignedTask.getDescription());
-            ps.setInt(6, assignedTask.getId());
+            ps.setString(6, assignedTask.getStatus());
+            ps.setInt(7, assignedTask.getId());
             int rows = ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -210,7 +211,7 @@ public class AssignTaskDAO {
      * create assign
      */
     public void createNewAssign(AssignedTask assignedTask) {
-        String sql = "INSERT INTO assign_task(staff_id,task_id,user_id,assign_date,description) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO assign_task(staff_id,task_id,user_id,assign_date,description,status) VALUES (?, ?, ?, ?, ?,?)";
         try (Connection connection = DBConnection.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, assignedTask.getStaff_id());
@@ -218,6 +219,7 @@ public class AssignTaskDAO {
             ps.setInt(3, assignedTask.getUser_id());
             ps.setDate(4, new Date(assignedTask.getAssignDate().getTime()));
             ps.setString(5, assignedTask.getDescription());
+            ps.setString(6, assignedTask.getStatus());
             int rows = ps.executeUpdate();
             System.out.println("rows: " + rows);
         } catch (Exception e) {
@@ -242,6 +244,7 @@ public class AssignTaskDAO {
                 assignedTask.setUser_id(rs.getInt("user_id"));
                 assignedTask.setAssignDate(rs.getDate("assign_date"));
                 assignedTask.setDescription(rs.getString("description"));
+                assignedTask.setStatus(rs.getString("status"));
                 assignedTasks.add(assignedTask);
             }
         } catch (Exception e) {
@@ -268,6 +271,7 @@ public class AssignTaskDAO {
                 assignedTask.setUser_id(rs.getInt("user_id"));
                 assignedTask.setAssignDate(rs.getDate("assign_date"));
                 assignedTask.setDescription(rs.getString("description"));
+                assignedTask.setStatus(rs.getString("status"));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -277,6 +281,6 @@ public class AssignTaskDAO {
 
     public static void main(String[] args) {
         AssignTaskDAO assignTaskDAO = new AssignTaskDAO();
-        System.out.println(assignTaskDAO.getAssignedById(1).toString());
+        System.out.println(assignTaskDAO.getAssignedById(3).toString());
     }
 }

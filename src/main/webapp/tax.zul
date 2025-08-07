@@ -1,0 +1,72 @@
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <style src="/css/tailwind.css"/>
+    <style src="/css/contractDetailPage.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" type="text/javascript"/>
+
+    <include src="/WEB-INF/page-component/mainHeader.zul"/>
+
+    <div sclass="w-full h-full pt-[24px] px-[80px]">
+        <!-- Tiêu đề -->
+        <div width="100%">
+            <label sclass="font-bold text-[16px]" value="QUẢN LÝ HỢP ĐỒNG/ MẪU HÓA ĐƠN / THUẾ SUẤT"/>
+        </div>
+        <div sclass="w-full mt-4">
+            <grid width="100%">
+                <columns>
+                    <column width="50%"/>
+                    <column width="50%"/>
+                </columns>
+                <rows>
+                    <row>
+                        <div width="100%">
+                            <label value="Quản lý hợp đồng / thuế suất"/>
+                            <grid width="100%" sclass="compact-grid">
+                                <columns>
+                                    <column width="20%"/>
+                                    <column width="80%"/>
+                                </columns>
+                                <rows>
+                                    <row>
+                                        <label style=" ;" value="Dịch vụ (*)"/>
+                                        <combobox width="100%" id="cbTypeService" placeholder="Chọn đối tác"></combobox>
+                                    </row>
+                                    <row>
+                                        <label style=" ;" value="Đối tác (*)"/>
+                                        <combobox width="100%" id="cbPartner" placeholder="Chọn đối tác"></combobox>
+                                    </row>
+                                    <row>
+                                        <label style=" ;" value="Hợp đồng (*)"/>
+                                        <combobox width="100%" id="cbContract" placeholder="Chọn đối tác"></combobox>
+                                    </row>
+                                </rows>
+                            </grid>
+                        </div>
+                        <div width="100%">
+                            <label style="color:white" value="  a"/>
+                            <grid width="100%" sclass="compact-grid">
+                                <columns>
+                                    <column width="20%"/>
+                                    <column width="80%"/>
+                                </columns>
+                                <rows>
+                                    <row>
+                                        <label style=" ;" value="Từ ngày (*)"/>
+                                        <datebox id="dbStartDate" width="100%" />
+                                    </row>
+                                    <row>
+                                        <label style=" ;" value="Đến ngày (*)"/>
+                                        <datebox id="dbEndDate" width="100%" />
+                                    </row>
+                                    <row>
+                                        <label style=" ;" value="Loại thuế (*)"/>
+                                        <combobox width="100%"  placeholder="Chọn đối tác"></combobox>
+                                    </row>
+                                </rows>
+                            </grid>
+                        </div>
+                    </row>
+                </rows>
+            </grid>
+        </div>
+    </div>
+</zk>

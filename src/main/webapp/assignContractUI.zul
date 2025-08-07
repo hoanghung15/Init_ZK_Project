@@ -23,7 +23,7 @@
                         <!-- H1 C1: Thông tin công việc -->
                         <div width="100%">
                             <label value="Thông tin công việc" style=" margin-bottom:5px;"/>
-                            <grid width="100%" sclass="compact-grid">
+                            <grid width="100%" sclass="compact-grid mt-4">
                                 <columns>
                                     <column width="20%"/>
                                     <column width="30%"/>
@@ -126,7 +126,7 @@
                                         </combobox>
                                         <label value="Nhân viên"/>
                                         <combobox id="cbStaffTaskAssigned" width="100%">
-                                            <comboitem  value="" label="---Tất cả---"/>
+                                            <comboitem value="" label="---Tất cả---"/>
                                         </combobox>
                                     </row>
                                     <row>
@@ -147,8 +147,14 @@
                                         <datebox disabled="true" id="dbEndDateTask" width="100%"/>
                                     </row>
                                     <row>
-                                        <label value=""/>
-
+                                        <label value="Trạng thái"/>
+                                        <cell colspan="3">
+                                           <combobox id="cbStatusAssign" width="100%">
+                                               <comboitem value="IN PROCESS" label="Đang tiến hành "/>
+                                               <comboitem value="DONE" label="Hoàn thành "/>
+                                               <comboitem value="PENDING" label="Tạm hoãn "/>
+                                           </combobox>
+                                        </cell>
                                         <label value=""/>
 
                                     </row>
@@ -211,10 +217,12 @@
                             <label value="Danh sách giao việc"/>
                             <listbox id="lbAssignTask" sclass="custom-list" width="100%">
                                 <listhead>
-                                    <listheader style="color:#767676;" label="STT"  sclass="text-start"  width="50px"/>
-                                    <listheader style="color:#767676;" sclass="text-start" width="125px" label="Người giao "/>
-                                    <listheader style="color:#767676;" sclass="text-start"  width="130px" label="Nhân viên"/>
-                                    <listheader style="color:#767676;" sclass="text-start" width="70px"  label="Mã CV"/>
+                                    <listheader style="color:#767676;" label="STT" sclass="text-start" width="50px"/>
+                                    <listheader style="color:#767676;" sclass="text-start" width="125px"
+                                                label="Người giao "/>
+                                    <listheader style="color:#767676;" sclass="text-start" width="130px"
+                                                label="Nhân viên"/>
+                                    <listheader style="color:#767676;" sclass="text-start" width="70px" label="Mã CV"/>
                                     <listheader style="color:#767676;" sclass="text-start" label="Phòng ban"/>
                                     <listheader style="color:#767676;" sclass="text-start" label="Ngày giao"/>
                                     <listheader style="color:#767676;" sclass="text-start" label="Đến ngày"/>

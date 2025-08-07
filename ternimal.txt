@@ -1,10 +1,30 @@
 npx tailwindcss -i ./src/main/webapp/css/input.css -o ./src/main/webapp/css/tailwind.css --watch
+----
+ALTER TABLE task
+DROP FOREIGN KEY fk_task_contract;
 
+ALTER TABLE task
+ADD CONSTRAINT fk_task_contract
+    FOREIGN KEY (contract_id) REFERENCES contract(id)
+    ON DELETE CASCADE;
+
+----
+ALTER TABLE assign_task
+DROP FOREIGN KEY assign_task_ibfk_1;
+
+ALTER TABLE assign_task
+ADD CONSTRAINT assign_task_ibfk_1
+    FOREIGN KEY (task_id) REFERENCES task(id)
+    ON DELETE CASCADE;
+
+
+----
 create table assign_task(
     id int auto_increment not null primary key,
     staff_id int not null ,
     task_id int not null ,
     user_id int not null,
+    status varchar(255) not null DEFAULT 'IN PROCESS',
     assign_date date not null ,
     description varchar(255) not null ,
     foreign key (task_id) references task(id),

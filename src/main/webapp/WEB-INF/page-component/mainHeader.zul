@@ -11,7 +11,7 @@
     <div apply="org.example.testdemozul.controller.HeaderController" sclass="w-full px-[80px] mt-[20px]">
         <div sclass="row py-[10px]">
             <div sclass="col-5 flex">
-                <image sclass="me-3 scale-100" src="/images/logoViettel_inline.png"/>
+                <image sclass=" me-5 scale-100" src="/images/logoViettel_inline.png"/>
                 <label sclass="font-bold mt-[12px]" value="QUẢN LÝ VÀ ĐỐI SOÁT HỢP ĐỒNG"/>
             </div>
             <div sclass="col-4"></div>
@@ -22,25 +22,21 @@
         </div>
 
         <hbox sclass="w-full mt-[12px] test bg-danger flex items-center text-white text-bold rounded-2">
-            <label value="Trang chủ" sclass="cursor-pointer hover:underline  me-3 "
+            <label value="Trang chủ" sclass="cursor-pointer hover:underline  me-5 "
                    onClick='Executions.sendRedirect("/home.zul")'/>
-            <label value="Quản lý hợp đồng" sclass="cursor-pointer hover:underline  me-3 "
+            <label value="Quản lý hợp đồng" sclass="cursor-pointer hover:underline  me-5 "
                    onClick='Executions.sendRedirect("/contractUI.zul")'/>
-            <label value="Quản lý giao việc" sclass="cursor-pointer hover:underline  me-3 "
+            <label value="Thuế suất" sclass="cursor-pointer hover:underline  me-5 "
+                   onClick='Executions.sendRedirect("/tax.zul")'/>
+            <label value="Quản lý giao việc" sclass="cursor-pointer hover:underline   me-5 "
                    onClick='Executions.sendRedirect("/assignContractUI.zul")'/>
-            <label value="Quản lý biên bản hóa đơn" sclass="cursor-pointer hover:underline  me-3 "
+            <label value="Quản lý biên bản hóa đơn" sclass="cursor-pointer hover:underline   me-5 "
                    onClick='Executions.sendRedirect("/other.zul")'/>
-            <label value="Báo cáo" sclass="cursor-pointer hover:underline  me-3 "
+            <label value="Báo cáo" sclass="cursor-pointer hover:underline   me-5 "
                    onClick='org.zkoss.zk.ui.Executions.sendRedirect("/other.zul")'/>
-            <label value="Web portal" sclass="cursor-pointer hover:underline  me-3 "
+            <label value="Web portal" sclass="cursor-pointer hover:underline   me-5 "
                    onClick='Executions.sendRedirect("/other.zul")'/>
-            <label value="Quản lý đề nghị chuyển tiền" sclass="cursor-pointer hover:underline  me-3 "
-                   onClick='Executions.sendRedirect("/other.zul")'/>
-            <label value="Quản lý đối soát - Đơn vị ngoài" sclass="cursor-pointer hover:underline  me-3 "
-                   onClick='Executions.sendRedirect("/other.zul")'/>
-            <label value="Tiệc ích" sclass="cursor-pointer hover:underline  me-3 "
-                   onClick='Executions.sendRedirect("/other.zul")'/>
-            <label value="Khác" sclass="cursor-pointer hover:underline  me-3 "
+            <label value="Quản lý đề nghị chuyển tiền" sclass="cursor-pointer hover:underline   me-5 "
                    onClick='Executions.sendRedirect("/other.zul")'/>
         </hbox>
     </div>
