@@ -120,13 +120,12 @@ public class AssignTaskController extends SelectorComposer<Component> {
 
             switch (value) {
                 case "assigned":
-                    taskList = assignTaskDAO.getAllTaskWithFilter(1);     // staff_id > 0
+                    taskList = assignTaskDAO.getAllTaskWithFilter(1);
                     break;
                 case "unassigned":
-                    taskList = assignTaskDAO.getAllTaskWithFilter(-1);    // staff_id = 0
-                    break;
+                    taskList = assignTaskDAO.getAllTaskWithFilter(-1);
                 default:
-                    taskList = assignTaskDAO.getAllTaskWithFilter(null);  // tất cả
+                    taskList = assignTaskDAO.getAllTaskWithFilter(null);
                     break;
             }
 

@@ -68,7 +68,7 @@
 
             </div>
             <div width="100%" sclass="mt-4">
-                <textbox placeholder="Nhập mã số thuế  " width="100%"/>
+                <textbox id="tbSearchMST" placeholder="Nhập mã số thuế  " width="100%"/>
                 <listbox id="lbPartner" sclass="custom-list mt-2" width="100%">
                     <listhead>
                         <listheader style="color:#767676;" label="STT" width="40px"/>

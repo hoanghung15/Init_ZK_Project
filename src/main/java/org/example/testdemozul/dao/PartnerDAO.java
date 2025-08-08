@@ -54,6 +54,44 @@ public class PartnerDAO {
         return partners;
     }
 
+    public List<Partner> getPartnersByMST(String mst) {
+        List<Partner> partners = new ArrayList<>();
+        StringBuilder sql = new StringBuilder("SELECT * FROM partner");
+
+        boolean hasMst = mst != null && !mst.trim().isEmpty();
+        if (hasMst) {
+            sql.append(" WHERE mst = ?");
+        }
+
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql.toString())) {
+
+            if (hasMst) {
+                ps.setString(1, mst);
+            }
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Partner partner = new Partner();
+                    partner.setId(rs.getInt("id"));
+                    partner.setPartner_id(rs.getString("partner_id"));
+                    partner.setMst(rs.getString("mst"));
+                    partner.setName(rs.getString("name"));
+                    partner.setAddress(rs.getString("address"));
+                    partner.setStatus(rs.getString("status"));
+                    partner.setTimestamp(new DateTime(rs.getTimestamp("timestamp")));
+                    partner.setDescription(rs.getString("description"));
+                    partners.add(partner);
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return partners;
+    }
+
     public void deletePartner(Integer id) {
         String sql = "delete from partner where id = ?";
         try (Connection connection = DBConnection.getConnection();
@@ -79,6 +117,7 @@ public class PartnerDAO {
                 partner.setAddress(rs.getString("address"));
                 partner.setStatus(rs.getString("status"));
                 partner.setPartner_id(rs.getString("partner_id"));
+                partner.setTimestamp(new DateTime(rs.getTimestamp("timestamp")));
                 partner.setDescription(rs.getString("description"));
             }
         } catch (Exception e) {
@@ -87,8 +126,42 @@ public class PartnerDAO {
         return partner;
     }
 
+    public void updatePartner(Partner partner) {
+        String sql = "update partner set partner_Id = ?, name = ?, address = ?, status = ?, timestamp = ?, description = ?, mst = ? where id = ?";
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, partner.getPartner_id());
+            ps.setString(2, partner.getName());
+            ps.setString(3, partner.getAddress());
+            ps.setString(4, partner.getStatus());
+            ps.setTimestamp(5, new java.sql.Timestamp(partner.getTimestamp().getValue()));
+            ps.setString(6, partner.getDescription());
+            ps.setString(7, partner.getMst());
+            ps.setInt(8, partner.getId());
+
+            int row = ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void acceptPartner(Integer id) {
+        String sql = "update partner set status = 'DONE'  where id = ?";
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
     public static void main(String[] args) {
         PartnerDAO partnerDAO = new PartnerDAO();
-        System.out.println(partnerDAO.getPartnerByMST("MST003").toString());
+//        partnerDAO.getPartnersByMST(null);
+        for (Partner partner : partnerDAO.getPartnersByMST("MST008")) {
+            System.out.println(partner.toString());
+        }
     }
 }

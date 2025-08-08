@@ -29,7 +29,7 @@ public class PartnerController extends SelectorComposer<Component> {
     private Combobox cbStatus;
 
     @Wire
-    private Textbox tbPartnerName, tbPartnerAddress, tbMST, tbPartnerID, tbDescription;
+    private Textbox tbPartnerName, tbPartnerAddress, tbMST, tbPartnerID, tbDescription, tbSearchMST;
 
     @Wire
     private Button btnSave, btnAccept, btnRefresh, btnDelete;
@@ -45,14 +45,15 @@ public class PartnerController extends SelectorComposer<Component> {
     public void doAfterCompose(Component comp) throws Exception {
         super.doAfterCompose(comp);
 
-        partnerList = partnerDAO.getAllPartners();
+        partnerList = partnerDAO.getPartnersByMST(null);
         applyListPartner();
 
         btnSave.addEventListener(Events.ON_CLICK, event -> {
             if (tmpPartnerID == null) {
                 createNewPartner();
             } else {
-                Messagebox.show("Update");
+                updatePartner();
+                Executions.sendRedirect(null);
             }
         });
         btnRefresh.addEventListener(Events.ON_CLICK, event -> {
@@ -73,6 +74,21 @@ public class PartnerController extends SelectorComposer<Component> {
                 Messagebox.show("Bạn phải chọn đối tác để thao tác ");
             }
         });
+        btnAccept.addEventListener(Events.ON_CLICK, event -> {
+            if (tmpPartnerID != null) {
+                Messagebox.show("Bạn có muốn phê duyệt thông tin đối tác này không?", "Thông báo",
+                        Messagebox.OK, Messagebox.INFORMATION,
+                        clickEvent -> {
+                            if (clickEvent.getName().equals("onOK")) {
+                                partnerDAO.acceptPartner(tmpPartnerID);
+                                Executions.sendRedirect(null);
+                            }
+                        });
+
+            } else {
+                Messagebox.show("Bạn phải chọn đối tác để phê duyệt! ");
+            }
+        });
 
         lbPartner.addEventListener(Events.ON_SELECT, event -> {
             if (lbPartner.getSelectedItem() != null) {
@@ -80,6 +96,11 @@ public class PartnerController extends SelectorComposer<Component> {
                 tmpPartnerID = partner.getId();
                 fillForm(partner);
             }
+        });
+
+        tbSearchMST.addEventListener(Events.ON_CHANGE, event -> {
+            partnerList = partnerDAO.getPartnersByMST(tbSearchMST.getValue());
+            applyListPartner();
         });
     }
 
@@ -152,6 +173,24 @@ public class PartnerController extends SelectorComposer<Component> {
         tbDescription.setValue(partner.getDescription());
 
 
+    }
+
+
+    /**
+     * Update Partner
+     */
+    public void updatePartner() {
+        Partner partner = new Partner();
+        partner.setId(tmpPartnerID);
+        partner.setPartner_id(tbPartnerID.getValue());
+        partner.setName(tbPartnerName.getValue());
+        partner.setAddress(tbPartnerAddress.getValue());
+        partner.setStatus(cbStatus.getSelectedItem().getValue());
+        partner.setTimestamp(new DateTime(System.currentTimeMillis()));
+        partner.setDescription(tbDescription.getValue());
+        partner.setMst(tbMST.getValue());
+
+        partnerDAO.updatePartner(partner);
     }
 
     private void selectComboboxByValue(Combobox combobox, Object value) {
