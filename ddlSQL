@@ -3,12 +3,12 @@ create table partner
     id          int auto_increment
         primary key,
     partner_Id  varchar(10)                    not null,
-    mst         varchar(20)                    not null,
     name        varchar(100)                   not null,
     address     varchar(250)                   not null,
     status      varchar(250) default 'PENDING' null,
     timestamp   timestamp                      not null,
-    description varchar(255)                   null
+    description varchar(255)                   null,
+    mst         varchar(20)                    not null
 );
 
 create table staff

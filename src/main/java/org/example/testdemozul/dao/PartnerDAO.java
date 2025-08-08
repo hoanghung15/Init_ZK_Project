@@ -65,9 +65,30 @@ public class PartnerDAO {
         }
     }
 
+    public Partner getPartnerByMST(String mst) {
+        Partner partner = new Partner();
+        String sql = "select * from partner where mst LIKE ?";
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, mst);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                partner.setId(rs.getInt("id"));
+                partner.setMst(rs.getString("mst"));
+                partner.setName(rs.getString("name"));
+                partner.setAddress(rs.getString("address"));
+                partner.setStatus(rs.getString("status"));
+                partner.setPartner_id(rs.getString("partner_id"));
+                partner.setDescription(rs.getString("description"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return partner;
+    }
+
     public static void main(String[] args) {
         PartnerDAO partnerDAO = new PartnerDAO();
-        System.out.println(partnerDAO.getAllPartners().size());
-        ;
+        System.out.println(partnerDAO.getPartnerByMST("MST003").toString());
     }
 }

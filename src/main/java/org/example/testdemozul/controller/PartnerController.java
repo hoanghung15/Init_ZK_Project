@@ -49,24 +49,21 @@ public class PartnerController extends SelectorComposer<Component> {
         applyListPartner();
 
         btnSave.addEventListener(Events.ON_CLICK, event -> {
-            createNewPartner();
-            Messagebox.show("Đã tạo đối tác thành công!", "Thông báo",
-                    Messagebox.OK, Messagebox.INFORMATION,
-                    clickEvent -> {
-                        if (clickEvent.getName().equals("onOK")) {
-                            Executions.sendRedirect(null);
-                        }
-                    });
+            if (tmpPartnerID == null) {
+                createNewPartner();
+            } else {
+                Messagebox.show("Update");
+            }
         });
         btnRefresh.addEventListener(Events.ON_CLICK, event -> {
             Executions.sendRedirect(null);
         });
         btnDelete.addEventListener(Events.ON_CLICK, event -> {
             if (tmpPartnerID != null) {
-                Messagebox.show("Bạn có muốn xóa thông tin dối tác không?","Thông báo",
+                Messagebox.show("Bạn có muốn xóa thông tin dối tác không?", "Thông báo",
                         Messagebox.OK, Messagebox.INFORMATION,
                         clickEvent -> {
-                            if(clickEvent.getName().equals("onOK")) {
+                            if (clickEvent.getName().equals("onOK")) {
                                 partnerDAO.deletePartner(tmpPartnerID);
                                 Executions.sendRedirect(null);
                             }
@@ -95,20 +92,32 @@ public class PartnerController extends SelectorComposer<Component> {
                 || tbPartnerName.getValue() == null || tbPartnerName.getValue().equals("")
                 || tbPartnerAddress.getValue() == null || tbPartnerAddress.getValue().equals("")) {
             Messagebox.show("Vui lòng nhập đầu đủ thông tin đối tác !");
-        }
-        Partner partner = new Partner();
-        partner.setPartner_id(tbPartnerID.getValue());
-        partner.setMst(tbMST.getValue());
-        partner.setName(tbPartnerName.getValue());
-        partner.setAddress(tbPartnerAddress.getValue());
-        if (cbStatus.getValue() != null && !cbStatus.getValue().equals("")) {
-            partner.setStatus(cbStatus.getSelectedItem().getValue());
         } else {
-            partner.setStatus("PENDING");
+            if (partnerDAO.getPartnerByMST(tbMST.getValue()).getMst() != null) {
+                Messagebox.show("Đã tồn tại đối tác với Mã số thuế này !");
+            } else {
+                Partner partner = new Partner();
+                partner.setPartner_id(tbPartnerID.getValue());
+                partner.setMst(tbMST.getValue());
+                partner.setName(tbPartnerName.getValue());
+                partner.setAddress(tbPartnerAddress.getValue());
+                if (cbStatus.getValue() != null && !cbStatus.getValue().equals("")) {
+                    partner.setStatus(cbStatus.getSelectedItem().getValue());
+                } else {
+                    partner.setStatus("PENDING");
+                }
+                partner.setTimestamp(new DateTime(System.currentTimeMillis()));
+                partner.setDescription(tbDescription.getValue());
+                partnerDAO.createNewPartner(partner);
+                Messagebox.show("Đã tạo đối tác thành công!", "Thông báo",
+                        Messagebox.OK, Messagebox.INFORMATION,
+                        clickEvent -> {
+                            if (clickEvent.getName().equals("onOK")) {
+                                Executions.sendRedirect(null);
+                            }
+                        });
+            }
         }
-        partner.setTimestamp(new DateTime(System.currentTimeMillis()));
-        partner.setDescription(tbDescription.getValue());
-        partnerDAO.createNewPartner(partner);
 
     }
 
@@ -144,7 +153,6 @@ public class PartnerController extends SelectorComposer<Component> {
 
 
     }
-
 
     private void selectComboboxByValue(Combobox combobox, Object value) {
         for (Comboitem item : combobox.getItems()) {
