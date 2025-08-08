@@ -5,7 +5,7 @@
 
     <include src="/WEB-INF/page-component/mainHeader.zul"/>
 
-    <div sclass="w-full h-full pt-[24px] px-[80px]">
+    <div apply="org.example.testdemozul.controller.PartnerController" sclass="w-full h-full pt-[24px] px-[80px]">
         <!-- Tiêu đề -->
         <div width="100%">
             <label sclass="font-bold text-[16px]" value="PHÊ DUYỆT ĐỐI TÁC"/>
@@ -17,34 +17,49 @@
                     </columns>
                     <rows>
                         <row>
-                            <label value="Mã đối tác"/>
-                            <combobox width="100%" id="cbPartnerID"></combobox>
+                            <label value="Mã đối tác (*)"/>
+                            <textbox placeholder="Nhập mã đối tác " width="100%" id="tbPartnerID"/>
                         </row>
                         <row>
-                            <label value="Mã số thuế "/>
-                            <combobox width="100%" id="cbMST"></combobox>
+                            <label value="Mã số thuế (*)"/>
+                            <textbox placeholder="Nhập mã số thuế doanh nghiệp " width="100%" id="tbMST"/>
                         </row>
                         <row>
-                            <label value="Tên doanh nghiệp "/>
-                            <textbox width="100%" id="tbPartnerName"></textbox>
+                            <label value="Tên doanh nghiệp(*) "/>
+                            <textbox placeholder="Nhập tên doanh nghiệp" width="100%" id="tbPartnerName"></textbox>
                         </row>
                         <row>
-                            <label value="Địa chỉ "/>
-                            <textbox width="100%" id="tbPartnerAddress"></textbox>
+                            <label value="Địa chỉ (*) "/>
+                            <textbox placeholder="Nhập địa chỉ chính doanh nghiệp" width="100%" id="tbPartnerAddress"></textbox>
                         </row>
                         <row>
                             <label value="Trạng thái "/>
-                            <combobox width="100%" id="cbStatus"></combobox>
+                            <combobox id="cbStatus"
+                                      placeholder="Trạng thái phê duyệt" width="100%">
+                                <comboitem value="DONE" label="Đã duyệt"/>
+                                <comboitem value="REJECT" label="Từ chối"/>
+                                <comboitem value="PENDING" label="Chờ xác minh"/>
+                            </combobox>
                         </row>
-
+                        <row>
+                            <label value="Mô tả"/>
+                            <textbox placeholder="Nhập mô tả / lí do từ chối - chấp nhận" width="100%" id="tbDescription"/>
+                        </row>
                         <row>
                             <cell colspan="2">
                                 <div sclass="flex justify-center gap-4 mt-2">
                                     <button id="btnAccept"
-                                            sclass="px-4 py-1 bg-green-500 text-white rounded hover:bg-green-600"
-                                            label="Xét duyệt"/>
-                                    <button id="btnReject" sclass="px-4 py-1 bg-red-500 text-white rounded hover:bg-red-600"
-                                            label="Từ chối "/>
+                                            sclass="px-4 py-1 bg-primary text-white rounded hover:bg-green-600"
+                                            label="Phê duyệt"/>
+                                    <button id="btnSave"
+                                            sclass="px-4 py-1 bg-success text-white rounded hover:bg-green-600"
+                                            label="Lưu"/>
+                                    <button id="btnRefresh"
+                                            sclass="px-4 py-1 bg-warning text-white rounded hover:bg-green-600"
+                                            label="Làm mới"/>
+                                    <button id="btnDelete"
+                                            sclass="px-4 py-1 bg-red-500 text-white rounded hover:bg-red-600"
+                                            label="Xóa"/>
                                 </div>
                             </cell>
                         </row>
@@ -52,6 +67,21 @@
                 </grid>
 
             </div>
+            <div width="100%" sclass="mt-4">
+                <textbox placeholder="Nhập mã số thuế  " width="100%"/>
+                <listbox id="lbPartner" sclass="custom-list mt-2" width="100%">
+                    <listhead>
+                        <listheader style="color:#767676;" label="STT" width="40px"/>
+                        <listheader style="color:#767676;" sclass="text-start" label="Mã đối tác"/>
+                        <listheader style="color:#767676;" sclass="text-start" label="Tên doanh nghiệp "/>
+                        <listheader style="color:#767676;" sclass="text-start" label="Mã số thuế "/>
+                        <listheader style="color:#767676;" sclass="text-start" label="Đia chỉ"/>
+                        <listheader style="color:#767676;" sclass="text-start" label="Trạng thái"/>
+                        <listheader style="color:#767676;" sclass="text-start" label="Cập nhật gần nhất "/>
+                    </listhead>
+                </listbox>
+            </div>
+
         </div>
     </div>
 </zk>
