@@ -5,7 +5,7 @@
 
     <include src="/WEB-INF/page-component/mainHeader.zul"/>
 
-    <div sclass="w-full h-full pt-[24px] px-[80px]">
+    <div apply="org.example.testdemozul.controller.TaxController" sclass="w-full h-full pt-[24px] px-[80px]">
         <!-- Tiêu đề -->
         <div width="100%">
             <label sclass="font-bold text-[16px]" value="QUẢN LÝ HỢP ĐỒNG/ MẪU HÓA ĐƠN / THUẾ SUẤT"/>
@@ -28,15 +28,18 @@
                                 <rows>
                                     <row>
                                         <label style=" ;" value="Dịch vụ (*)"/>
-                                        <combobox width="100%" id="cbTypeService"  ></combobox>
+                                        <combobox width="100%" id="cbTypeService">
+                                            <comboitem value="Hợp đồng mua bán" label="Hợp đồng mua bán"/>
+                                            <comboitem value="Hợp đồng dịch vụ" label="Hợp đồng dịch vụ"/>
+                                        </combobox>
                                     </row>
                                     <row>
                                         <label style=" ;" value="Đối tác (*)"/>
-                                        <combobox width="100%" id="cbPartner"  ></combobox>
+                                        <combobox width="100%" id="cbPartner"></combobox>
                                     </row>
                                     <row>
                                         <label style=" ;" value="Hợp đồng (*)"/>
-                                        <combobox width="100%" id="cbContract"  ></combobox>
+                                        <combobox width="100%" id="cbContract"></combobox>
                                     </row>
                                 </rows>
                             </grid>
@@ -51,32 +54,41 @@
                                 <rows>
                                     <row>
                                         <label style=" ;" value="Từ ngày (*)"/>
-                                        <datebox id="dbStartDate" width="100%" />
+                                        <datebox id="dbStartDate" width="100%"/>
                                     </row>
                                     <row>
                                         <label style=" ;" value="Đến ngày (*)"/>
-                                        <datebox id="dbEndDate" width="100%" />
+                                        <datebox id="dbEndDate" width="100%"/>
                                     </row>
                                     <row>
                                         <label style=" ;" value="Loại thuế (*)"/>
-                                        <combobox width="100%"   ></combobox>
+                                        <combobox id="cbTypeTax" width="100%">
+                                            <comboitem value="Không tính thuế" label="Không tính thuế"/>
+                                            <comboitem value="Có tính thuế" label="Có tính thuế"/>
+                                        </combobox>
                                     </row>
                                 </rows>
                             </grid>
                         </div>
                     </row>
-                    <row> <cell colspan="2">
-                        <div sclass="flex justify-center gap-4 mt-2">
-                            <button
-                                    sclass=" py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600"
-                                    label="Làm mới"/>
-                            <button
-                                    sclass="px-4 py-1 bg-green-500 text-white rounded hover:bg-green-600"
-                                    label="Khai báo thuế suất"/>
-                            <button  sclass="px-4 py-1 bg-red-500 text-white rounded hover:bg-red-600"
-                                    label="Hủy"/>
-                        </div>
-                    </cell></row>
+                    <row>
+                        <cell colspan="2">
+                            <div sclass="flex justify-center gap-4 mt-2">
+                                <button
+                                        id="btnRefresh"
+                                        sclass=" py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600"
+                                        label="Làm mới"/>
+                                <button
+                                        id="btnSave"
+                                        sclass="px-4 py-1 bg-green-500 text-white rounded hover:bg-green-600"
+                                        label="Khai báo thuế suất"/>
+
+                                <button id="btnCancel"
+                                        sclass="px-4 py-1 bg-red-500 text-white rounded hover:bg-red-600"
+                                        label="Hủy"/>
+                            </div>
+                        </cell>
+                    </row>
                 </rows>
             </grid>
         </div>
@@ -85,7 +97,7 @@
             <label value="Danh sách hợp đồng / thuế suất"/>
         </div>
         <div width="100%">
-            <listbox  sclass="custom-list" width="100%">
+            <listbox id="lbTax" sclass="custom-list" width="100%">
                 <listhead>
                     <listheader style="color:#767676;" label="STT" width="50px"/>
                     <listheader style="color:#767676;" sclass="text-start" label="Dịch vụ"/>
@@ -95,7 +107,8 @@
                     <listheader style="color:#767676;" sclass="text-start" label="Thuế suất "/>
                     <listheader style="color:#767676;" sclass="text-start" label="Công thức thuế "/>
                     <listheader style="color:#767676;" sclass="text-start" label="Từ ngày "/>
-                    <listheader style="color:#767676;" sclass="text-start" label="Đến ngày "/> </listhead>
+                    <listheader style="color:#767676;" sclass="text-start" label="Đến ngày "/>
+                </listhead>
             </listbox>
         </div>
     </div>

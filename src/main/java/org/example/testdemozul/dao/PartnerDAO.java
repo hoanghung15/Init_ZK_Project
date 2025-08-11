@@ -126,6 +126,29 @@ public class PartnerDAO {
         return partner;
     }
 
+    public Partner getPartnerById(Integer id) {
+        Partner partner = new Partner();
+        String sql = "select * from partner where id = ?";
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                partner.setId(rs.getInt("id"));
+                partner.setPartner_id(rs.getString("partner_id"));
+                partner.setMst(rs.getString("mst"));
+                partner.setName(rs.getString("name"));
+                partner.setAddress(rs.getString("address"));
+                partner.setStatus(rs.getString("status"));
+                partner.setTimestamp(new DateTime(rs.getTimestamp("timestamp")));
+                partner.setDescription(rs.getString("description"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return partner;
+    }
+
     public void updatePartner(Partner partner) {
         String sql = "update partner set partner_Id = ?, name = ?, address = ?, status = ?, timestamp = ?, description = ?, mst = ? where id = ?";
         try (Connection connection = DBConnection.getConnection();
@@ -157,11 +180,39 @@ public class PartnerDAO {
 
     }
 
+    public List<Partner> getPartnerByAccepted() {
+        List<Partner> partners = new ArrayList<>();
+        String sql = "select * from partner where status = 'DONE'";
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Partner partner = new Partner();
+                partner.setId(rs.getInt("id"));
+                partner.setPartner_id(rs.getString("partner_id"));
+                partner.setMst(rs.getString("mst"));
+                partner.setName(rs.getString("name"));
+                partner.setAddress(rs.getString("address"));
+                partner.setStatus(rs.getString("status"));
+                partner.setTimestamp(new DateTime(rs.getTimestamp("timestamp")));
+                partner.setDescription(rs.getString("description"));
+
+                partners.add(partner);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return partners;
+    }
+
+
     public static void main(String[] args) {
         PartnerDAO partnerDAO = new PartnerDAO();
 //        partnerDAO.getPartnersByMST(null);
-        for (Partner partner : partnerDAO.getPartnersByMST("MST008")) {
-            System.out.println(partner.toString());
-        }
+//        for (Partner partner : partnerDAO.getPartnerByAccepted()) {
+//            System.out.println(partner.toString());
+//        }
+        System.out.println(partnerDAO.getPartnerById(6).toString());
+
     }
 }

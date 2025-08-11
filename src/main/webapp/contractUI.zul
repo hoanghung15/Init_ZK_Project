@@ -85,7 +85,7 @@
                                 <row>
                                     <label value="Loại hợp đồng:"/>
                                     <combobox id="cbContractType" width="100%">
-                                        <comboitem label="Hợp đồng mua bán"/>
+                                        <comboitem  label="Hợp đồng mua bán"/>
                                         <comboitem label="Hợp đồng dịch vụ"/>
                                     </combobox>
                                 </row>
