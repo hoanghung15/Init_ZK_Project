@@ -9,6 +9,7 @@ import org.example.staff_module.base.entity.Staff;
 import org.example.staff_module.base.repository.ContractRepo;
 import org.example.staff_module.base.repository.StaffRepo;
 import org.example.staff_module.base.service.StaffService;
+import org.example.staff_module.dto.response.ApiResponse;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,7 +35,7 @@ public class StaffController {
 
     @PreAuthorize("hasRole('Nhân viên')")
     @GetMapping("/contract")
-    public List<Contract> getContractToAccept(HttpServletRequest request) {
+    public ApiResponse<List<Contract>> getContractToAccept(HttpServletRequest request) {
         return staffService.getListContractToAccept(request);
     }
 

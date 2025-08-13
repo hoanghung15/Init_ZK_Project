@@ -81,6 +81,11 @@ public class TaxController extends SelectorComposer<Component> {
 
         btnSave.addEventListener(Events.ON_CLICK, event -> {
             createNewTax();
+            Executions.sendRedirect(null);
+        });
+
+        btnCancel.addEventListener(Events.ON_CLICK, event -> {
+            Executions.sendRedirect(null);
         });
     }
 
@@ -104,7 +109,7 @@ public class TaxController extends SelectorComposer<Component> {
         }
     }
 
-    public void applyListBoxTax(){
+    public void applyListBoxTax() {
         ListModelList<Tax> model = new ListModelList<>(taxList);
         lbTax.setModel(model);
 
@@ -118,17 +123,17 @@ public class TaxController extends SelectorComposer<Component> {
             new Listcell(contract.getName()).setParent(item);
             new Listcell(partner.getName()).setParent(item);
             new Listcell(tax.getType()).setParent(item);
-            if(tax.getType().equals("Không tính thuế")){
+            if (tax.getType().equals("Không tính thuế")) {
                 new Listcell("0%").setParent(item);
                 tmpTax = 0;
-            }else  if(tax.getType().equals("Có tính thuế") && contract.getContractType().equals( "Hợp đồng dịch vụ")){
+            } else if (tax.getType().equals("Có tính thuế") && contract.getContractType().equals("Hợp đồng dịch vụ")) {
                 new Listcell("1%").setParent(item);
                 tmpTax = 1;
-            }else  if(tax.getType().equals("Có tính thuế") && contract.getContractType().equals("Hợp đồng mua bán")){
+            } else if (tax.getType().equals("Có tính thuế") && contract.getContractType().equals("Hợp đồng mua bán")) {
                 new Listcell("5%").setParent(item);
                 tmpTax = 5;
             }
-            new Listcell("ROUND(" + String.valueOf(tmpTax) + "*1.1,0) + " +tmpTax+"*10").setParent(item);
+            new Listcell("ROUND(" + String.valueOf(tmpTax) + "*1.1,0) + " + tmpTax + "*10").setParent(item);
 
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             new Listcell(tax.getStartDate() != null ? sdf.format(tax.getStartDate()) : "").setParent(item);
